@@ -5,25 +5,22 @@ import os
 
 class connectDB:
     def __init__(self):
-        self.is_connected = False
         self._cnx = None
 
     def dbConnecting(self):
-        if self.is_connected != True:
+        if self._cnx == None or self._cnx.is_connected == False:
             try:
                 load_dotenv()
                 config = {
                     "host":"127.0.0.1",
-                    "user": "root",
+                    "user": os.getenv("API_SQL_USER"),
                     "password": os.getenv("API_SQL_PW"),
-                    "database": "trip_website"
+                    "database": os.getenv("API_SQL_DB")
                 }
 
                 self._cnx = mysql.connector.connect(pool_name="conn_Pooling",
                                             pool_size=5,
                                             **config)
-                if self._cnx != None:
-                    self.is_connected = True
 
             except errors.ConnectionTimeoutError:
                 print("發生超過連線時間錯誤。")
@@ -38,8 +35,9 @@ class connectDB:
     async def queryAtrractions(self, p: int, CAT: str=None, keyword: str=None):
         _result = False
         try:
-            if self.is_connected != True:
-                self.dbConnecting()   
+            if self._cnx == None or self._cnx.is_connected == False:
+                self.dbConnecting()
+   
             cursor1 = self._cnx.cursor()
             cursor2 = self._cnx.cursor()
             try:
@@ -120,9 +118,6 @@ class connectDB:
             item["description"] = row[3]
             item["address"] = row[4]
             item["transport"] = row[5]
-            # if row[6] == None:
-            #     item["mrt"] =None
-            # else:
             item["mrt"] = row[6]
             item["lat"] = row[7]
             item["lng"] = row[8]
@@ -137,7 +132,7 @@ class connectDB:
     async def queryAtrractionId(self, id: int):
         _result = False
         try:
-            if self.is_connected != True:
+            if self._cnx == None or self._cnx.is_connected == False:
                 self.dbConnecting()
             cursor1 = self._cnx.cursor()
             cursor2 = self._cnx.cursor()
@@ -184,7 +179,7 @@ class connectDB:
     async def queryCategory(self):
         _result = False
         try:
-            if self.is_connected != True:
+            if self._cnx == None or self._cnx.is_connected == False:
                 self.dbConnecting()
             cursor = self._cnx.cursor()
 
@@ -208,7 +203,7 @@ class connectDB:
     async def queryMRT(self):
         _result = False
         try:
-            if self.is_connected != True:
+            if self._cnx == None or self._cnx.is_connected == False:
                 self.dbConnecting()
             cursor = self._cnx.cursor()
 
