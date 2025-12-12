@@ -46,22 +46,27 @@ class connectDB:
                 idx = (p*7)+p            
                 if CAT != None and keyword != None:
                     # 原本要使用CGROUP_CONCAT()，但群組的字串超過1024字元，若要使用需要修改系統設定。
-                    # 修改完還得改回來，但畢竟是系統設定，不想亂動，所以就用兩條連接線處理。
-                    query_attr = """SELECT cateInfo.* FROM (SELECT * FROM `trip_information` WHERE category=%s) AS cateInfo 
-                                    WHERE cateInfo.mrt=%s OR cateInfo.name LIKE %s LIMIT 9 OFFSET %s;"""       
+                    # 修改完還得改回來，但畢竟是系統設定，不想亂動，所以改用子查詢的方式，合併成一條查詢語句。       
+                    query_attr = """SELECT img.file, info.* FROM `trip_image` AS img 
+                                    INNER JOIN (SELECT cateInfo.* FROM (SELECT * FROM `trip_information` WHERE category=%s) AS cateInfo 
+                                    WHERE cateInfo.mrt=%s OR cateInfo.name LIKE %s LIMIT 9 OFFSET %s) AS info ON img.info_id=info.id;"""
                     kw = "%"+keyword+"%"
                     attr_dt = (CAT, keyword, kw, idx)
                 elif CAT != None:
-                    query_attr = """SELECT * FROM `trip_information` 
-                                    WHERE category=%s LIMIT 9 OFFSET %s;"""
+                    query_attr = """SELECT img.file, info.* FROM `trip_image` AS img 
+                                    INNER JOIN (SELECT * FROM `trip_information` WHERE category=%s LIMIT 9 OFFSET %s) AS info 
+                                    ON img.info_id=info.id;"""
                     attr_dt = (CAT, idx)
                 elif keyword != None:
-                    query_attr = """SELECT * FROM `trip_information` 
-                                    WHERE mrt=%s OR name LIKE %s LIMIT 9 OFFSET %s;"""
+                    query_attr = """SELECT img.file, info.* FROM `trip_image` AS img 
+                                    INNER JOIN (SELECT * FROM `trip_information` WHERE mrt=%s OR name LIKE %s LIMIT 9 OFFSET %s) AS info
+                                    ON img.info_id=info.id;"""
                     kw = "%"+keyword+"%"
                     attr_dt = (keyword, kw, idx)
                 else:
-                    query_attr = """SELECT * FROM `trip_information` LIMIT 9 OFFSET %s;"""
+                    query_attr = """SELECT img.file, info.* FROM `trip_image` AS img 
+                                    INNER JOIN (SELECT * FROM `trip_information` LIMIT 9 OFFSET %s) AS info
+                                    ON img.info_id=info.id;"""
                     attr_dt = (idx,)
 
                 cursor1.execute(query_attr, attr_dt)
@@ -69,20 +74,7 @@ class connectDB:
 
                 if findAll != []:
                     dtJson = self.attractionFormat(findAll, p)        
-                    if dtJson != None:
-                        i = 0
-                        for row in dtJson["data"]:
-                            if i == 8:
-                                break
-                            query_attr_img = """SELECT file FROM `trip_image` WHERE info_id=%s;"""
-                            attrImg_dt = (row["id"])
-                            cursor2.execute(query_attr_img, (attrImg_dt,))
-                            imgFindAll = cursor2.fetchall()
-                            if len(imgFindAll) > 0:
-                                for file, in imgFindAll:
-                                    dtJson["data"][i]["images"].append(file)
-                            i += 1
-                        
+                    if dtJson != None:                         
                         _result = dtJson
 
             except Exception:
@@ -98,33 +90,34 @@ class connectDB:
             return False
             
 
-    def attractionFormat(self, dt, p):
-        dt_json = None
-        if len(dt) == 9:
-            pg = p +1
-            dt_json = {"nextPage": pg, "data":[]}
-        else:
-            dt_json = {"nextPage": None, "data":[]}
-
-        i = 0
+    def attractionFormat(self, dt, p):    
+        i = -1
+        info_id = None
+        dt_json = {"nextPage": None, "data":[]}
         for row in dt:
-            if i == 8:
-                break
+            if info_id != row[1]:
+                i +=1
+                info_id = row[1]
+                if i == 8:
+                    pg = p +1
+                    dt_json["nextPage"]= pg
+                    break
 
-            item = {}
-            item["id"] = row[0]
-            item["name"] = row[1]
-            item["category"] = row[2]
-            item["description"] = row[3]
-            item["address"] = row[4]
-            item["transport"] = row[5]
-            item["mrt"] = row[6]
-            item["lat"] = row[7]
-            item["lng"] = row[8]
-            item["images"] = []
-        
-            dt_json["data"].append(item)
-            i +=1
+                item = {}
+                item["id"] = row[1]
+                item["name"] = row[2]
+                item["category"] = row[3]
+                item["description"] = row[4]
+                item["address"] = row[5]
+                item["transport"] = row[6]
+                item["mrt"] = row[7]
+                item["lat"] = row[8]
+                item["lng"] = row[9]
+                item["images"] = [row[0]]           
+                dt_json["data"].append(item)   
+            elif "data" in dt_json:
+                if "images" in dt_json["data"][i]:
+                    dt_json["data"][i]["images"].append(row[0])
             
         return dt_json
 
@@ -138,28 +131,31 @@ class connectDB:
             cursor2 = self._cnx.cursor()
             try:
                 dt_json = None
-                query_id_info = """SELECT * FROM `trip_information` WHERE id=%s;"""
+                query_id_info = """SELECT img.file, info.* FROM `trip_image`AS img 
+                                    INNER JOIN (SELECT * FROM `trip_information` WHERE id=%s) AS info
+                                    ON img.info_id=info.id;"""
                 cursor1.execute(query_id_info, (id,))
-                findOne = cursor1.fetchone()
-                if findOne != None:
-                    dt_json = {"data":{
-                                    "id": findOne[0],
-                                    "name": findOne[1],
-                                    "category": findOne[2],
-                                    "description": findOne[3],
-                                    "address": findOne[4],
-                                    "transport": findOne[5],
-                                    "mrt": findOne[6],
-                                    "lat": findOne[7],
-                                    "lng": findOne[8],
-                                    "images": []
-                                    }}
-                    
-                    cursor2.execute("""SELECT file FROM `trip_image` WHERE info_id=%s;""", (id,))
-                    findImg = cursor2.fetchall()
-                    if findImg != []:
-                        for file, in findImg:
-                            dt_json["data"]["images"].append(file)
+                findAll = cursor1.fetchall()
+                if findAll != None:
+                    i = 0
+                    for row in findAll:
+                        if i == 0:
+                            dt_json = {"data":{
+                                            "id": row[1],
+                                            "name": row[2],
+                                            "category": row[3],
+                                            "description": row[4],
+                                            "address": row[5],
+                                            "transport": row[6],
+                                            "mrt": row[7],
+                                            "lat": row[8],
+                                            "lng": row[9],
+                                            "images": [row[0]]
+                                            }}
+                            i+=1
+                        elif "data" in dt_json:
+                            if "images" in dt_json["data"]:
+                                dt_json["data"]["images"].append(row[0])
                     
                 if dt_json != None:
                     _result = dt_json
