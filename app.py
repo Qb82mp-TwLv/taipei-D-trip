@@ -1,10 +1,13 @@
 from fastapi import *
 from fastapi.responses import FileResponse
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from connDB import connectDB
 
 app=FastAPI()
 getdt = connectDB()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 # Static Pages (Never Modify Code in this Block)
