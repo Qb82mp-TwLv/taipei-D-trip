@@ -304,11 +304,12 @@ async function callLoadingATT(tag) {
     // 使用isIntersecting的方式判斷該物件，是否有根據條件全部顯示在視窗中，
     // 若全部顯示於視窗中，才會繼續往下執行
     if (tag[0].isIntersecting){
-
         if (nextPage !== null && nextPageArr.includes(nextPage) !== true){
             const CAT = document.getElementById("categoryName");
             const mrtNmStr = document.getElementById("searInpt"); 
             let searchStr = "";
+            // 儲存當下要執行的頁碼
+            nextPageArr.push(nextPage);
 
             // 分類與關鍵字的部分
             if (CAT && mrtNmStr){
