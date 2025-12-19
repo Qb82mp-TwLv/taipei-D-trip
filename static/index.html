@@ -3,9 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/home/index.css">
+  <script defer src="/static/home/setWebData.js"></script>
   <title>Index</title>
 </head>
 <body>
-  
+    <nav class="Nav Nav-height">
+      <div class="Nav-content">
+        <div class="Nav-title">台北一日遊</div>
+        <div class="Nav Nav-btn">
+            <button class="btn-appearance">預定行程</button>
+            <button class="btn-sign">登入/註冊</button>
+        </div>
+      </div>
+    </nav>
+    <!-- nav下來的圖片 -->
+    <section class="Sec">
+      <img class="Sec-img" src="/static/img/welcome.png">
+    </section>
+
+    <div class="Sec-search">
+      <div class="Sec-engine">
+        <div class="search-text">
+          <div>
+            <span class=" search-big">輕鬆享受台北一日悠閒</span>
+          </div>
+          <div class="search-secStr">
+            <span class="search-small">探索每個角落，體驗城市的深度旅遊行程</span>
+          </div>
+        </div>
+        <div class="search-dt">
+          <div class="dt-select">
+            <button type="button" class="select-text" id="selectCategory">
+              <span id="categoryName">全部分類</span>
+              <img class="text-triangle" src="/static/img/triangle.png">
+            </button>
+            <div class="dt-droplist" id="dropItem">
+              <ul class="dt-option"  id="searchDropList">
+                <!-- <li class="option">全部分類</li>
+                -->
+              </ul>
+            </div>
+          </div>
+          <div class="search-input">
+            <input type="text" class="search-input searchStr" id="searInpt" value="輸入景點名稱查詢">
+          </div>
+          <div class="search-btn">
+            <button type="button" class="search-btn-icon" id="searBtn"><img src="/static/img/icon_search.png"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="webConent">
+      <div class="webConent-center">
+        <div class="center-bar">
+          <!-- list bar 可以左右滑動的功能 -->
+          <div class="listBar">
+            <button class="leftBtn" id="barLeftBtn"><img src="/static/img/left_Default.png"></button>
+            <div class="mrt-item" id="mrtItemScorll">
+              <ul class="mrt-container" id="mrtCTN">
+                <!-- <li class="mrt-option">劍潭</li>
+                -->
+              </ul>
+            </div>
+            <button class="rightBtn" id="barRightBtn"><img src="/static/img/right_Default.png"></button>
+          </div>
+        </div>
+
+        <!-- 顯示景點圖片與一些資訊 -->
+        <div class="center-img">
+          <div class="img-fw" id="imgFW">
+            <div class="img-content" id="imgCTN">
+
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer id="footerBlock">
+      <div>COPYRIGHT © 2021 台北一日遊</div>
+    </footer>
 </body>
 </html>

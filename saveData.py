@@ -12,9 +12,9 @@ class connectDB:
         self.connDB = None
         try:
             config = {
-                "user": "root",
+                "user": os.getevn("API_SQL_USER"),
                 "password": os.getenv("API_SQL_PW"),
-                "database": "trip_website"
+                "database": os.getevn("API_SQL_DB")
                 }
 
             self.connDB = mysql.connector.connect(**config)
