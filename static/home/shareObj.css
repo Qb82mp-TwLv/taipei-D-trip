@@ -1,0 +1,121 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    font-size: 62.5%;
+    font-family: 'Noto Sans TC';
+}
+
+.Nav{
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    z-index: 99;
+}
+
+.Nav-height{
+    height: 5.3rem;
+}
+
+.Nav-content{
+    margin-top: 9px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Nav-line{
+    border-bottom: 1px solid rgba(102, 102, 102, 0.1);
+}
+
+.Nav-title{
+    width: 15rem;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #448899;
+    margin-left: 0.7rem;
+    display: flex;
+    text-align: center;
+}
+
+.Nav-title-btn{
+    cursor: pointer;
+}
+
+.Nav-btn{
+    width: 15%;
+    margin-right: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-appearance{
+    width: 50%;
+    height: 3.2rem;
+    border: none;
+    background-color: transparent;
+    color: #666666;
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.btn-sign{
+    width: 50%;
+    height: 3.2rem;
+    border: none;
+    background-color: transparent;
+    color: #666666;
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+footer{
+    width: 100%;
+    height: 10rem;
+    background-color: #757575;
+    color: #fff;
+    margin-top: 5rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-text-padd{
+    padding-top: 1rem;
+}
+
+@media (1200px < width <=1920px){
+    .Nav-content{
+        width: 120rem;
+    }
+}
+
+@media (600px < width <= 1200px){
+    .Nav-content{
+        width: 100%;
+    }
+
+    .Nav-btn{
+        width: 20rem;
+    }
+}
+
+@media (360px <= width <= 600px){
+    .Nav-content{
+        width: 100%;
+    }
+
+    .Nav-btn{
+        width: 17rem;
+    }
+}
+

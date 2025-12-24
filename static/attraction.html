@@ -4,8 +4,94 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attraction</title>
+  <link rel="stylesheet" href="/static/home/shareObj.css">
+  <link rel="stylesheet" href="/static/att/attraction.css">
+  <script defer src="/static/att/loadingAttData.js"></script>
 </head>
 <body>
-  
+  <nav class="Nav Nav-height  Nav-line">
+    <div class="Nav-content">
+      <div class="Nav-title Nav-title-btn">台北一日遊</div>
+      <div class="Nav-btn">
+        <div class="btn-appearance btn-text-padd">預定行程</div>
+        <div class="btn-sign btn-text-padd">登入/註冊</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 第二區塊圖片與購買顯示 -->
+   <div class="attCTN">
+    <div class="att-img">
+      <div class="img-CTN">
+        <div class="ImgCTN-img">
+          <div class="imgSlides" id="imgItem">
+
+          </div>
+          <div class="slideBar" id="slideLine">
+            
+          </div>
+          <div class="sildeBtn">
+            <button type="button" class="leftBtn" id="slideLeft"><img src="/static/img/btn_leftArrow.png"></button>
+            <button type="button" class="rightBtn rightBtn-right" id="slideRight"><img src="/static/img/btn_rightArrow.png"></button>
+          </div>
+        </div>
+        <div class="ImgCTN-order">
+          <div class="imgName"></div>
+          <div class="imgCAT"></div>
+          <div class="orderCNT">
+            <div class="innerCTN">
+              <div class="order-title order-title-blod">訂購導覽行程</div>
+              <div class="order-title order-title-padd">以此景點為中心的一日行程，帶您探索城市角落故事</div>
+              <div class="order-date">
+                <div class="order-title order-title-blod">選擇日期：</div>
+                <input type="date" id="selectDate">
+              </div>
+              <div class="order-time">
+                <div class="order-title order-title-blod">選擇時間：</div>
+                <div class="radio-padd">
+                  <input type="radio" class="point-big" name="time" id="selectAM" checked/>
+                  <label for="selectAM" class="order-title order-title-medium">上半天</label>
+                </div>
+                <div class="radio-padd">
+                  <input type="radio" class="point-big" name="time" id="selectPM"/>
+                  <label for="selectPM" class="order-title order-title-medium">下半天</label>
+                </div>
+              </div>
+              <div class="order-price">
+                <div class="order-title order-title-blod">導覽費用：</div>
+                <div class="order-title order-title-medium" id="ordPrice">新台幣 2000 元</div>
+              </div>
+              <button class="order-btn">開始預約行程</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 介紹景點的內容 -->
+   <div class="att-introduction">
+    <div class="intro-CTN">
+      <div class="intro-explain">
+        <p class="explain-lineHeight" id="attIntroStr">
+          
+        </p>
+      </div>
+      <div class="intro-address">
+        <div class="intro-title">景點地址：</div>
+        <div class="intro-explain" id="attAddressStr"></div>
+      </div>
+      <div class="intro-traffic">
+        <div class="intro-title traffic-padd">交通方式：</div>
+        <div class="intro-explain explain-lineHeight">
+          <p id="attTrafficStr"></p>
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+
+  <footer>
+    <div>COPYRIGHT © 2021 台北一日遊</div>
+  </footer>
 </body>
 </html>
