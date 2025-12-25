@@ -95,7 +95,7 @@ html{
     border-radius: 0 0 0.5rem 0.5rem;
     z-index: 3;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(0.5rem, 1fr));
 }
 
 .slide-line{
@@ -341,11 +341,20 @@ input[type="date"]::-webkit-calendar-picker-indicator{
 
     .ImgCTN-order{
         margin-bottom: 4rem;
-        transform: translateX(1rem)
+    }
+
+    .imgName{
+        padding-left: 1.1rem;
+    }
+
+    .imgCAT{
+        padding-left: 1.1rem;
     }
 
     .orderCNT{
         width: 94%;
+        position: relative;
+        left: 1.1rem;
     }
 
     .att-introduction{
