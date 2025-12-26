@@ -8,56 +8,6 @@ html {
     font-family: 'Noto Sans TC';
 }
 
-.Nav{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.Nav-height{
-    height: 5.3rem;
-}
-
-.Nav-content{
-    /* width: 120rem; */
-    margin-top: 9px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.Nav-title{
-    font-size: 3rem;
-    font-weight: bold;
-    color: #448899;
-    margin-left: 0.7rem;
-}
-
-.Nav-btn{
-    width: 15%;
-    margin-right: 0.5rem;
-}
-
-.btn-appearance{
-    width: 50%;
-    height: 3.2rem;
-    border: none;
-    background-color: transparent;
-    color: #666666;
-    font-size: 1.6rem;
-    font-weight: 500;
-}
-
-.btn-sign{
-    width: 50%;
-    height: 3.2rem;
-    border: none;
-    background-color: transparent;
-    color: #666666;
-    font-size: 1.6rem;
-    font-weight: 500;
-}
-
 .Sec{
     width: 100%;
     height: 32rem;
@@ -353,6 +303,7 @@ html {
     height: 24rem;
     border: 1px solid #d8d8d8;
     border-radius: 0.5rem;
+    cursor: pointer;
 }
 
 .img-title{
@@ -410,28 +361,10 @@ html {
     margin-right: 0.8rem;
 }
 
-footer{
-    width: 100%;
-    height: 10rem;
-    background-color: #757575;
-    color: #fff;
-    margin-top: 5rem;
-    font-size: 1.6rem;
-    font-weight: bold;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 
 @media (1200px < width <= 1920px){
     body{
         width: 100%;
-    }
-
-    .Nav-content{
-        width: 120rem;
     }
 
     .Sec-engine{
@@ -443,14 +376,6 @@ footer{
 @media (600px < width <= 1200px){
     body{
         width: 100%;
-    }
-
-    .Nav-content{
-        width: 100%;
-    }
-
-    .Nav-btn{
-        width: 20rem;
     }
 
     .Sec-engine{
@@ -486,14 +411,6 @@ footer{
 @media (360px <= width <= 600px){
     body{
         width: 100%;
-    }
-
-    .Nav-content{
-        width: 100%;
-    }
-
-    .Nav-btn{
-        width: 17rem;
     }
 
     .Sec-engine{

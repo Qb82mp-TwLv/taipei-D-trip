@@ -154,7 +154,6 @@ let nextPageArr = [];
 // 紀錄是否有下一頁 
 let nextPage = 0;
 
-
 async function searchATT() { 
     const CAT = document.getElementById("categoryName");
     const mrtNmStr = document.getElementById("searInpt"); 
@@ -242,6 +241,7 @@ async function viewATTImg(attInfo) {
             for (i in attInfo){
                 let newTagBlock = document.createElement("div");
                 newTagBlock.classList.add("img-block");
+                newTagBlock.dataset.attInfoId=attInfo[i].id;
 
                 let newTagTitle = document.createElement("div");
                 newTagTitle.classList.add("img-title");
@@ -277,10 +277,20 @@ async function viewATTImg(attInfo) {
                 newTagBlock.appendChild(newTagInfo);
 
                 attImgCTN.appendChild(newTagBlock);
+
+                newTagBlock.addEventListener("click", attractionWeb);
             };
         };
     };
 };
+
+// 連接到attraction的資料頁面
+function attractionWeb() {
+    const id = this.dataset.attInfoId;
+    console.log("號碼:",id);
+
+    window.location.href = `/attraction/${id}`;
+}
 
 
 // 若沒有資料要顯示無查詢到相關資料的解釋
@@ -340,7 +350,6 @@ async function callLoadingATT(tag) {
                 }
 
                 const dtJson = await response.json();
-                // removeATTImg();
                 if ("data" in dtJson){
                     nextPage = dtJson.nextPage;
                     viewATTImg(dtJson.data);
@@ -355,7 +364,6 @@ async function callLoadingATT(tag) {
 }
 
 
-scrollLoading();
 // 監控滑軌是否footer的部分有全部出現在viewport
 async function scrollLoading() {
     const opt = {
@@ -368,4 +376,7 @@ async function scrollLoading() {
         observer.observe(footerTag);
     }
 }
+
+scrollLoading();
+
 
