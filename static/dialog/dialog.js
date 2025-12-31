@@ -170,7 +170,7 @@ async function signIn() {
 }
 
 // 每次載入都要呼叫確認是否已登入會員
-document.addEventListener("DOMContentLoaded", verifyLogged);
+verifyLogged();
 
 async function verifyLogged() {
     try{
