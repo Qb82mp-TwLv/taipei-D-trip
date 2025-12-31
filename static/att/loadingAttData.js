@@ -8,7 +8,7 @@ async function attractionInfo() {
   const attId = parseInt(urlPathnameSplit[2], 10);
   let attInfo = null;
 
-  console.log(attId);
+  //console.log(attId);
   await Promise.all([fetch(`/api/attraction/${attId}`, {method: "GET"})
     .then(response => {
       return response.json();
@@ -18,7 +18,7 @@ async function attractionInfo() {
     attInfo=data[0].data;
   });
 
-  console.log(attInfo);
+  //console.log(attInfo);
 
   imgSlideShow(attInfo.images);
 
@@ -42,7 +42,7 @@ async function imgSlideShow(arr) {
         // </div>
         const newTagImgCTNDiv = document.createElement("div");
         newTagImgCTNDiv.classList.add("img-width-fat");
-        const newTagImg = document.createElement("img");
+        const newTagImg = new Image();
         newTagImg.src = arr[i];
 
         newTagImgCTNDiv.appendChild(newTagImg);
