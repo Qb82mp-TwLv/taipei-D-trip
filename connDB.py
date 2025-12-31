@@ -1,4 +1,4 @@
-from mysql.connector import connect, errors
+from mysql.connector import connect, errors, OperationalError
 from dotenv import load_dotenv
 import mysql.connector
 import os
@@ -8,7 +8,7 @@ class connectDB:
         self._cnx = None
 
     def dbConnecting(self):
-        if self._cnx == None or self._cnx.is_connected == False:
+        if self._cnx == None:
             try:
                 load_dotenv()
                 config = {
@@ -30,7 +30,8 @@ class connectDB:
                 print("連線異常。")
             except Exception as e:
                 print("連線時發生其他錯誤:", e)      
-
+        elif self._cnx.is_connected == False:
+            self._cnx.reconnect(attempts=2, delay=3)
 
     async def queryAtrractions(self, p: int, CAT: str=None, keyword: str=None):
         _result = False
@@ -85,7 +86,10 @@ class connectDB:
                 if cursor1 is not None:
                     cursor1.close()
                 if cursor2 is not None:
-                    cursor2.close()            
+                    cursor2.close() 
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False           
         except Exception:
             return False
             
@@ -168,6 +172,9 @@ class connectDB:
                     cursor1.close()
                 if cursor2 is not None:
                     cursor2.close()
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
         except Exception:
             return False
         
@@ -192,6 +199,9 @@ class connectDB:
                 cursor.close()
             
             return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
         except Exception:
             return False
         
@@ -217,7 +227,10 @@ class connectDB:
             if cursor is not None:
                 cursor.close()
 
-            return _result     
+            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False     
         except Exception:
             return False
         
@@ -245,6 +258,9 @@ class connectDB:
                 self._cnx.rollback()
 
             return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
         except Exception:
             return False
 
@@ -274,6 +290,9 @@ class connectDB:
                 cursor.close()
 
             return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
         except Exception:
             return False
 
@@ -298,6 +317,9 @@ class connectDB:
                 cursor.close()
 
             return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
         except Exception:
             return False
         
