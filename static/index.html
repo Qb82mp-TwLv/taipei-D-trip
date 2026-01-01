@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/static/home/shareObj.css">
-  <link rel="stylesheet" href="/static/home/index.css">
-  <script defer src="/static/home/setWebData.js"></script>
-  <title>Index</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/home/shareObj.css">
+    <link rel="stylesheet" href="/static/home/index.css">
+    <link rel="stylesheet" href="/static/dialog/dialog.css">
+    <script defer src="/static/home/setWebData.js"></script>
+    <script defer src="/static/dialog/dialog.js"></script>
+    <title>Index</title>
+  </head>
+  <body>
     <nav class="Nav Nav-height">
       <div class="Nav-content">
         <div class="Nav-title">台北一日遊</div>
         <div class="Nav Nav-btn">
           <button class="btn-appearance">預定行程</button>
-          <button class="btn-sign">登入/註冊</button>
+          <button class="btn-sign" id="member_btn">登入/註冊</button>
         </div>
       </div>
     </nav>
@@ -86,5 +88,44 @@
     <footer id="footerBlock">
       <div>COPYRIGHT © 2021 台北一日遊</div>
     </footer>
-</body>
+
+    <dialog class="logsign_dialog">
+      <div class="dialog_hair"></div>
+      <div class="dialog_operaction">
+        <div class="dialog_sec">
+          <div></div>
+          <div class="sec_title">登入會員帳號</div>
+          <button type="button" class="sec_btn">
+            <img src="/static/img/icon_close.png">
+          </button>
+        </div>
+        <div class="dialog_third">
+          <div class="third_operationPart opt1">
+            <input type="text" class="operationPart_name" id="nameStr" placeholder="輸入姓名">
+          </div>
+          <div class="third_operationPart opt2">
+            <input type="email" class="operationPart_email" id="emailStr" placeholder="輸入電子信箱">
+          </div>
+          <div class="third_operationPart opt3">
+            <input type="password" class="operationPart_pw" id="pwStr" placeholder="輸入密碼">
+          </div>
+          <div class="third_operationPart signin_btn">
+            <button type="button">註冊新帳戶</button>
+          </div>
+          <div class="third_operationPart login_btn">
+            <button type="button">登入帳戶</button>
+          </div>
+          <div class="dialog_error">電子信箱發生重複的錯誤</div>
+          <div class="dialog_remind_signin">
+            <span>已經有帳戶了？</span>
+            <span class="signin_loginBtn">點此登入</span>
+          </div>
+          <div class="dialog_remind_login">
+            <span>還沒有帳戶？</span>
+            <span class="login_signinBtn">點此註冊</span>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  </body>
 </html>

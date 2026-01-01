@@ -1,0 +1,133 @@
+.logsign_dialog{
+    width: 33rem;
+    min-width: 33rem;
+    border-radius: 0.5rem;
+    border: none;
+    /* 水平置中的方法 */
+    margin-left: auto;
+    margin-right: auto;
+    /* 離top一段距離 */
+    margin-top: 8rem;
+}
+
+.dialog_hair{
+    width: 100%;
+    height: 1rem;
+    background: linear-gradient(170deg, rgba(102,170,187, 0.8) 0%, rgba(102,170,187, 1) 5%, rgba(51, 119, 136, 1) 65%);
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.dialog_operaction{
+    width: 31rem;
+    min-width: 31rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    display: grid;
+    grid-template-columns: 31rem;
+    gap: 1rem;
+}
+
+.dialog_sec{
+    width: 31rem;
+    display: grid;
+    grid-template-columns: minmax(6rem, 1fr) minmax(14rem, max-content) minmax(6rem, 1fr);
+    gap: 1rem;
+}
+
+.sec_title{
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #666666;
+    text-align: center;
+}
+
+.sec_btn{
+    width: 7.4rem;
+    font-size: 3rem;
+    border: none;
+    outline: none;
+    background: none;
+    text-align: right;
+}
+
+.sec_btn img{
+    padding-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.dialog_third{
+    width: 31rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.third_operationPart{
+    width: 31rem;
+    height: 4.6rem;
+}
+
+.third_operationPart input{
+    width: 31rem;
+    height: 100%;
+    border-radius: 0.5rem;
+    border: 0.1rem solid #CCCCCC;
+    font-size: 1.6rem;
+    font-weight: 450;
+    color: #757575;
+    /* 避免使用padding時，物件超出範圍的方式 */
+    box-sizing: border-box;
+    padding-left: 1.6rem;
+}
+
+.third_operationPart button{
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+    border: none;
+    background: #448899;
+    color: #fff;
+    font-size: 1.9rem;
+    font-weight: 300;
+    cursor: pointer;
+}
+
+.dialog_error{
+    width: 100%;
+    height: 2rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-align: center;
+    color: red;
+    display: none;
+}
+
+.dialog_remind_signin, .dialog_remind_login{
+    width: 31.4rem;
+    height: 2.5rem;
+    text-align: center;
+    /* 移除span的間隔 */
+    font-size: 0;
+}
+
+.dialog_remind_login span, .dialog_remind_signin span{
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.dialog_remind_signin{
+    display: none;
+}
+
+.signin_btn{
+    display: none;
+}
+
+.opt1{
+    display: none;
+}
+
+.signin_loginBtn, .login_signinBtn{
+    cursor:pointer;
+}
+

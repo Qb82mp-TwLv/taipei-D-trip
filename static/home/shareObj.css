@@ -73,6 +73,7 @@ html {
     color: #666666;
     font-size: 1.6rem;
     font-weight: 500;
+    cursor: pointer;
 }
 
 footer{
@@ -90,7 +91,8 @@ footer{
 }
 
 .btn-text-padd{
-    padding-top: 1rem;
+    padding-top: 0.8rem;
+    text-align: center;
 }
 
 @media (1200px < width <=1920px){

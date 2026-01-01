@@ -245,7 +245,7 @@ async function viewATTImg(attInfo) {
 
                 let newTagTitle = document.createElement("div");
                 newTagTitle.classList.add("img-title");
-                let newTagFile = document.createElement("img");
+                let newTagFile = new Image();
                 newTagFile.classList.add("img-file");
                 newTagFile.src = attInfo[i].images[0];
                 let newTagTitleName = document.createElement("div");
@@ -363,7 +363,7 @@ async function callLoadingATT(tag) {
     }
 }
 
-
+scrollLoading();
 // 監控滑軌是否footer的部分有全部出現在viewport
 async function scrollLoading() {
     const opt = {
@@ -376,7 +376,4 @@ async function scrollLoading() {
         observer.observe(footerTag);
     }
 }
-
-scrollLoading();
-
 

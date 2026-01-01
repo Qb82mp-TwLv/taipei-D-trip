@@ -1,4 +1,4 @@
-from mysql.connector import connect, errors
+from mysql.connector import connect, errors, OperationalError
 from dotenv import load_dotenv
 import mysql.connector
 import os
@@ -8,7 +8,7 @@ class connectDB:
         self._cnx = None
 
     def dbConnecting(self):
-        if self._cnx == None or self._cnx.is_connected == False:
+        if self._cnx == None:
             try:
                 load_dotenv()
                 config = {
@@ -30,7 +30,8 @@ class connectDB:
                 print("連線異常。")
             except Exception as e:
                 print("連線時發生其他錯誤:", e)      
-
+        elif self._cnx.is_connected == False:
+            self._cnx.reconnect(attempts=2, delay=3)
 
     async def queryAtrractions(self, p: int, CAT: str=None, keyword: str=None):
         _result = False
@@ -77,15 +78,18 @@ class connectDB:
                     if dtJson != None:                         
                         _result = dtJson
 
-            except Exception:
+                return _result
+            except Exception as e:
+                print(e)
                 return False
             finally:
                 if cursor1 is not None:
                     cursor1.close()
                 if cursor2 is not None:
-                    cursor2.close()
-                
-                return _result
+                    cursor2.close() 
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False           
         except Exception:
             return False
             
@@ -160,6 +164,7 @@ class connectDB:
                 if dt_json != None:
                     _result = dt_json
 
+                return _result
             except Exception:
                 return False
             finally:
@@ -167,8 +172,9 @@ class connectDB:
                     cursor1.close()
                 if cursor2 is not None:
                     cursor2.close()
-                    
-            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
         except Exception:
             return False
         
@@ -193,6 +199,9 @@ class connectDB:
                 cursor.close()
             
             return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
         except Exception:
             return False
         
@@ -218,6 +227,99 @@ class connectDB:
             if cursor is not None:
                 cursor.close()
 
-            return _result     
+            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False     
         except Exception:
             return False
+        
+    async def signInUser(self, userDt):
+        _result = False
+        try:
+            if self._cnx == None or self._cnx.is_connected == False:
+                self.dbConnecting()
+            cursor = self._cnx.cursor()
+
+            query_user_email = """SELECT email FROM `trip_user` WHERE LOWER(email)=LOWER(%s);"""
+            cursor.execute(query_user_email, (userDt.email,))
+
+            findOne = cursor.fetchone()
+            if findOne is None:
+                _result = {"ok": True}
+                create_user = """INSERT INTO `trip_user` (name, email, password)
+                                VALUES (%s, %s , %s);"""
+                create_dt = (userDt.name, userDt.email, userDt.password)
+                cursor.execute(create_user, create_dt)
+
+            if isinstance(_result, dict):
+                self._cnx.commit()
+            else:
+                self._cnx.rollback()
+
+            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
+        except Exception:
+            return False
+
+
+
+    async def verifyToken(self, userDt):
+        _result = False
+        try:
+            if self._cnx == None or self._cnx.is_connected == False:
+                self.dbConnecting()
+            cursor = self._cnx.cursor()
+
+            query_user_info = """SELECT _id, name, email FROM `trip_user` WHERE _id=%s AND name=%s AND email=%s;"""
+            query_data = (userDt["id"], userDt["name"], userDt["email"])
+
+            cursor.execute(query_user_info, query_data)
+            findOne = cursor.fetchone()
+
+            if findOne != None:
+                _result = {"data":{
+                    "id": findOne[0],
+                    "name": findOne[1],
+                    "email": findOne[2]
+                }}
+
+            if cursor is not None:
+                cursor.close()
+
+            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
+        except Exception:
+            return False
+
+
+    async def loginUser(self, userDt):
+        _result = False
+        try:
+            if self._cnx == None or self._cnx.is_connected == False:
+                self.dbConnecting()
+            cursor = self._cnx.cursor()
+
+            query_user_info = """SELECT _id, name, email FROM `trip_user` WHERE LOWER(email)=LOWER(%s) AND password=%s;"""
+            query_data = (userDt.email, userDt.password)
+
+            cursor.execute(query_user_info, query_data)
+            findOne = cursor.fetchone()
+
+            if findOne is not None:
+                _result = {"id": findOne[0], "name": findOne[1], "email": findOne[2]}
+
+            if cursor is not None:
+                cursor.close()
+
+            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
+        except Exception:
+            return False
+        
