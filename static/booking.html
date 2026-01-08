@@ -1,11 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Booking</title>
-</head>
-<body>
-  
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/home/shareObj.css">
+    <link rel="stylesheet" href="/static/booking/booking.css">
+    <script defer src="/static/booking/loadingBookData.js"></script>
+    <script defer type="module" src="/static/dialog/dialog.js"></script>
+    <title>Booking</title>
+  </head>
+  <body>
+    <Nav class="Nav Nav-height Nav-line">
+      <div class="Nav-content">
+        <div class="Nav-title Nav-title-btn">台北一日遊</div>
+        <div class="Nav-btn">
+          <div class="btn-appearance btn-text-padd" id="shoppingCart_btn">預定行程</div>
+          <div class="btn-sign btn-text-padd" id="member_btn">登入/註冊</div>
+        </div>
+      </div>
+    </Nav>
+
+    <div class="reserveInfo">
+      <div class="reserveInfoCTN">
+        <div class="reserve-ctn1">
+          <div class="reserve-itinerary">
+            <div class="itinerary-title">您好，<span class="userNM"></span>，待預訂的行程如下：</div>
+            <div class="itinerary-imgStr">
+                <div class="imgStr-img"></div>
+                
+              </div>
+            </div>
+          </div>
+
+          <div class="reserve-ctn2">
+            <div class="reserve-contact">
+             
+            </div>
+          </div>
+          
+          <div class="reserve-ctn3">
+            <div class="reserve-pay">
+              
+            </div>
+          </div>
+
+          <div class="reserve-ctn4">
+           
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div>COPYRIGHT © 2021 台北一日遊</div>
+    </footer>
+  </body>
 </html>

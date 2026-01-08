@@ -63,6 +63,7 @@ html {
     color: #666666;
     font-size: 1.6rem;
     font-weight: 500;
+    cursor:pointer;
 }
 
 .btn-sign{
@@ -88,6 +89,13 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.footer-height{
+    height: auto;
+    align-items: normal;
+    line-height: 10rem;
+    margin-top: 0.5rem;
 }
 
 .btn-text-padd{
