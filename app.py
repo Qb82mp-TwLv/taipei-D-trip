@@ -101,7 +101,7 @@ async def signIn(userDt: signInInfo):
 		"message": "請按照情境提供對應的錯誤訊息"
 	}
 	_result = await getdt.signInUser(userDt)
-	
+
 	if isinstance(_result, dict) and _result.get("ok") is not None:
 		return JSONResponse(_result)
 	else:

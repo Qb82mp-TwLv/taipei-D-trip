@@ -1,5 +1,5 @@
 // 封裝登入的執行功能
-export default class dialogLog {
+class dialogLog {
     // 初始化部分
     constructor(){
         // 跳出對話視窗
@@ -15,7 +15,7 @@ export default class dialogLog {
         this.reservedBtn = document.getElementById("shoppingCart_btn");
         if (this.reservedBtn){
             this.reservedBtn.addEventListener("click", () => {
-            this.bookingWeb();
+                this.bookingWeb();
             });
         }
 
