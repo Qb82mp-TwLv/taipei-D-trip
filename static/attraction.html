@@ -8,14 +8,15 @@
     <link rel="stylesheet" href="/static/att/attraction.css">
     <link rel="stylesheet" href="/static/dialog/dialog.css">
     <script defer src="/static/att/loadingAttData.js"></script>
-    <script defer src="/static/dialog/dialog.js"></script>
+    <script defer type="module" src="/static/dialog/dialog.js"></script>
+    <script defer type="module" src="/static//att/createBooking.js"></script>
   </head>
   <body>
     <nav class="Nav Nav-height  Nav-line">
       <div class="Nav-content">
         <div class="Nav-title Nav-title-btn">台北一日遊</div>
         <div class="Nav Nav-btn btn-text-padd">
-          <div class="btn-appearance">預定行程</div>
+          <div class="btn-appearance" id="shoppingCart_btn">預定行程</div>
           <div class="btn-sign" id="member_btn">登入/註冊</div>
         </div>
       </div>
@@ -63,7 +64,7 @@
                   <div class="order-title order-title-blod">導覽費用：</div>
                   <div class="order-title order-title-medium" id="ordPrice">新台幣 2000 元</div>
                 </div>
-                <button class="order-btn">開始預約行程</button>
+                <button class="order-btn" id="startBooking_btn">開始預約行程</button>
               </div>
             </div>
           </div>

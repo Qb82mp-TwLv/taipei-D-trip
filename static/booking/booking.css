@@ -1,0 +1,305 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+html{
+    font-size: 62.5%; /* 16*0.625 = 10 */
+    font-family: 'Noto Sans TC';
+}
+
+body{
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+}
+
+.reserveInfo{
+    display: flex;
+    justify-content: center;
+}
+
+.reserve-ctn1, .reserve-ctn2, .reserve-ctn3{
+    width: 100%;
+    border-bottom: 1px solid rgb(232, 232, 232);
+}
+
+.reserve-ctn1{
+    height: 34rem;
+}
+
+
+.reserve-itinerary{
+    padding-top: 4.1rem;
+    padding-left: 10rem;
+    padding-bottom: 3.9rem;
+    padding-right: 11rem;
+}
+
+.itinerary-title{
+    height: 3rem;
+    font-size: 1.9rem;
+    font-weight: bold;
+    color: #666666;
+}
+
+.itinerary-imgStr{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(5rem, max-content)) 1fr;
+    gap: 3rem;
+    margin-top: 2.8rem;
+}
+
+.imgStr-img{
+    width: 25rem;
+    height: 20rem;
+    padding-left: 1rem;
+    overflow: hidden;
+
+    /* 如果為文字，會使用這些CSS */
+    font-size: 1.6rem;
+    font-weight: 450;
+    color: #666666;
+}
+
+.imgStr-img img{
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.imgStr-text{
+    width: 70rem;
+    display: grid;
+    grid-template-rows: repeat(4, max-content);
+    gap: 1rem;
+}
+
+.text-title{
+    height: 2rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #448899;
+    padding-bottom: 1rem;
+}
+
+.text-date, .text-time, .text-price, .text-adress{
+    font-size: 1.6rem;
+    display: flex;
+    color: #666666;
+    gap: 0.5rem;
+}
+
+.title-bold{
+    font-weight: bold;
+}
+
+.content-medium{
+    font-weight: 500;
+}
+
+.itinerary-del{
+    text-align: right;
+}
+
+.itinerary-del img{
+    cursor: pointer;
+}
+
+.reserve-contact{
+    padding-top: 3.7rem;
+    padding-left: 10rem;
+    padding-bottom: 4.3rem;
+    display: grid;
+    grid-template-rows: repeat(5, minmax(1.5rem, max-content));
+    gap: 1.5rem;
+}
+
+.contact-title, .pay-title{
+    font-size: 1.9rem;
+    font-weight: bold;
+    color: #666666;
+    padding-bottom: 0.4rem;
+}
+
+.contact-name, .contact-email, .contact-mobile,
+.pay-number, .pay-time, .pay-pw{
+    font-size: 1.6rem;
+    font-weight: 500;
+    display: flex;
+    color: #666666;
+    align-items: center;
+}
+
+.contact-input, .pay-input{
+    height: 3.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(232, 232, 232);
+    outline: none;
+    color: #000;
+    font-size: 1.6rem;
+    font-weight: 500;
+    font-family: 'Noto Sans TC';
+    /* 調整輸入框內的文字距離 */
+    text-indent: 1rem;
+}
+
+.contact-remark{
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #666666
+}
+
+.reserve-pay{
+    padding-top: 3.7rem;
+    padding-left: 10rem;
+    padding-bottom: 4rem;
+    display: grid;
+    grid-template-rows: repeat(4, minmax(1.5rem, max-content));
+    gap: 1.5rem;
+}
+
+.pay-input-weight{
+    font-weight: 500;
+}
+
+.reserve-ctn4{
+    width: 100%;
+}
+
+.reserve-order{
+    padding-top: 3.7rem;
+    padding-left: 10rem;
+    padding-right: 11rem;
+    padding-bottom: 1.5rem;
+    display: grid;
+    grid-template-rows: repeat(2, minmax(2rem, max-content));
+    gap: 0.8rem;
+    justify-items: right;
+}
+
+.reserve-order div{
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #666666;
+}
+
+.buy_btn{
+    width: 17rem;
+    height: 3.6rem;
+    background-color: #448899;
+    color: #fff;
+    border-radius: 0.5rem;
+    border: none;
+    font-size: 1.9rem;
+    font-weight: 300;
+    margin-top: 1.2rem;
+    cursor: pointer;
+}
+
+@media (1200px < width <= 1920px){
+    .reserveInfoCTN{
+        width: 120rem;
+        /* height: 98rem; */
+        display: grid;
+        grid-template-rows: repeat(4, minmax(1rem, max-content));
+    }
+
+}
+
+@media (640px < width <= 1200px){
+    .reserveInfo{
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .reserveInfoCTN{
+        width: 100%;
+        /* height: 98rem; */
+        display: grid;
+        grid-template-rows: repeat(4, minmax(1rem, max-content));
+    }
+
+    .reserve-itinerary{
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .reserve-ctn1{
+        height: auto;
+    }
+
+    .reserve-itinerary{
+        width: 100%;
+    }
+
+    .imgStr-text{
+        width: 100%;
+    }
+
+    .reserve-contact{
+        padding-left: 1rem;
+    }
+
+    .reserve-pay{
+        padding-left: 1rem;
+    }
+
+    .reserve-order{
+        padding-right: 0;
+    }
+}
+
+@media (300px <= width <= 640px) {
+    .reserveInfo{
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .reserveInfoCTN{
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-rows: repeat(4, minmax(1rem, max-content));
+    }
+
+    .reserve-itinerary{
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .reserve-ctn1{
+        height: auto;
+    }
+
+    .itinerary-imgStr{
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(3, minmax(1rem, max-content));
+        gap: 1rem;
+    }
+
+    .imgStr-img{
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .imgStr-text{
+        width: 100%;
+        padding-top: 1.6rem;
+    }
+
+    .reserve-contact{
+        padding-left: 0;
+    }
+
+    .reserve-pay{
+        padding-left: 0;
+    }
+
+    .reserve-order{
+        padding-right: 0;
+    }
+}

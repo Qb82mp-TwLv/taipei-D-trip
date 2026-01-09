@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.security import OAuth2PasswordBearer
-from typing import Annotated
+from typing import Optional
 from connDB import connectDB
 from dotenv import load_dotenv
 from pydantic import BaseModel
@@ -18,7 +18,8 @@ getdt = connectDB()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 # 取得request的Authenticate Bearer的token參數
-oauth2_getBearer = OAuth2PasswordBearer(tokenUrl="token")
+# 使用auto_error=False的話，若沒找到權杖，只會回傳None
+oauth2_getBearer = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)
 
 # Static Pages (Never Modify Code in this Block)
 @app.get("/", include_in_schema=False)
@@ -100,23 +101,27 @@ async def signIn(userDt: signInInfo):
 		"message": "請按照情境提供對應的錯誤訊息"
 	}
 	_result = await getdt.signInUser(userDt)
-	
+
 	if isinstance(_result, dict) and _result.get("ok") is not None:
 		return JSONResponse(_result)
 	else:
 		return JSONResponse(_content)
 
 @app.get("/api/user/auth")
-async def getCurrentUser(token: Annotated[str, Depends(oauth2_getBearer)]):  # 使用Depends的方式呼叫取token的方法，並接收回傳的值
-	dtJson = decodeToken(token)
-	if isinstance(dtJson, dict):
-		_result = await getdt.verifyToken(dtJson)
-		if isinstance(_result, dict):
-			return JSONResponse(_result)
+async def getCurrentUser(token: Optional[str]=Depends(oauth2_getBearer)):  # 使用Depends的方式呼叫取token的方法，並接收回傳的值
+	if token != None:
+		dtJson = decodeToken(token)
+		if isinstance(dtJson, dict):
+			_result = await getdt.verifyToken(dtJson)
+			if isinstance(_result, dict):
+				return JSONResponse(_result)
+			else:
+				return JSONResponse({"data": None})
 		else:
 			return JSONResponse({"data": None})
-	else:
-		return JSONResponse({"data": None})
+	
+	return JSONResponse({"data": None})
+
 
 class loginInfo(BaseModel):
 	email: str
@@ -175,3 +180,86 @@ def decodeToken(token):
 		return False
 	except Exception:
 		return False
+	
+
+@app.get("/api/booking")
+async def getShoppingCartInfo(token: Optional[str]=Depends(oauth2_getBearer)):
+	_content = {
+		"error": True,
+		"message": "請按照情境提供對應的錯誤訊息"
+	}
+
+	if token != None:
+		try:
+			dtJson = decodeToken(token)
+			if isinstance(dtJson, dict):
+				_verify = await getdt.verifyToken(dtJson)
+				if _verify.get("data") != None:
+					userId = _verify["data"]["id"]
+					_result = await getdt.queryBookATrip(userId)
+					if _result.get("data").get("attraction") != None:
+						return JSONResponse(_result)
+			
+			return JSONResponse({"data": None})
+		except Exception:
+			return JSONResponse({"data": None})
+	else:
+		return JSONResponse(_content)
+
+
+class bookInfo(BaseModel):
+	attractionId: int
+	date: str
+	time: str
+	price: int
+
+@app.post("/api/booking")
+async def createShoppingCartInfo(bookDt: bookInfo, token: Optional[str]=Depends(oauth2_getBearer)):
+	_content = {
+		"error": True,
+		"message": "請按照情境提供對應的錯誤訊息"
+	}
+	
+	if token != None:
+		try:
+			dtJson = decodeToken(token)
+			if isinstance(dtJson, dict):
+				_verify = await getdt.verifyToken(dtJson)
+				if _verify.get("data") != None:
+					userId = _verify["data"]["id"]
+					_result = await getdt.createBookATrip(bookDt, userId)
+					if _result.get("ok") != None:
+						return JSONResponse(_result)
+				
+			return JSONResponse(_content)
+		except Exception:
+			# 內部發生錯誤
+			return JSONResponse(_content)
+	else:
+		# 當未登入的狀態，拒絕存取
+		return JSONResponse(_content)
+
+
+@app.delete("/api/booking")	
+async def deleteShoppingCartInfo(token: Optional[str]=Depends(oauth2_getBearer)):
+	_content = {
+		"error": True,
+		"message": "請按照情境提供對應的錯誤訊息"
+	}
+
+	if token != None:
+		try:
+			dtJson = decodeToken(token)
+			if isinstance(dtJson, dict):
+				_verify = await getdt.verifyToken(dtJson)
+				if _verify.get("data") != None:
+					userId = _verify["data"]["id"]
+					_result = await getdt.delBookATrip(userId)
+					if _result.get("ok") != None:
+						return JSONResponse(_result)
+
+			return JSONResponse(_content)
+		except Exception:
+			return JSONResponse(_content)
+	else:
+		return JSONResponse(_content)

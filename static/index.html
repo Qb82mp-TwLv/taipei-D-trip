@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/home/index.css">
     <link rel="stylesheet" href="/static/dialog/dialog.css">
     <script defer src="/static/home/setWebData.js"></script>
-    <script defer src="/static/dialog/dialog.js"></script>
+    <script defer type="module" src="/static/dialog/dialog.js"></script>
     <title>Index</title>
   </head>
   <body>
@@ -15,7 +15,7 @@
       <div class="Nav-content">
         <div class="Nav-title">台北一日遊</div>
         <div class="Nav Nav-btn">
-          <button class="btn-appearance">預定行程</button>
+          <button class="btn-appearance" id="shoppingCart_btn">預定行程</button>
           <button class="btn-sign" id="member_btn">登入/註冊</button>
         </div>
       </div>
@@ -49,7 +49,7 @@
             </div>
           </div>
           <div class="search-input">
-            <input type="text" class="search-input searchStr" id="searInpt" value="輸入景點名稱查詢">
+            <input type="text" class="search-input searchStr" id="searInpt" placeholder="輸入景點名稱查詢">
           </div>
           <div class="search-btn">
             <button type="button" class="search-btn-icon" id="searBtn"><img src="/static/img/icon_search.png"></button>

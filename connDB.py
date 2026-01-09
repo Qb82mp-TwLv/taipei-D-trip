@@ -252,7 +252,7 @@ class connectDB:
                 create_dt = (userDt.name, userDt.email, userDt.password)
                 cursor.execute(create_user, create_dt)
 
-            if isinstance(_result, dict):
+            if isinstance(_result, dict) and cursor.rowcount == 1:
                 self._cnx.commit()
             else:
                 self._cnx.rollback()
@@ -322,4 +322,101 @@ class connectDB:
             return False
         except Exception:
             return False
+
+    async def queryBookATrip(self, userId):
+        _result = False
+        try:
+            if self._cnx == None or self._cnx.is_connected == False:
+                self.dbConnecting()
+            cursor = self._cnx.cursor()
+
+            query_book_info = """SELECT book.attraction_id, info.name, info.address, img.file, book.book_date, book.book_time, book.price 
+                                FROM `trip_booking`AS book 
+                                INNER JOIN `trip_information` AS info ON info.id=book.attraction_id
+                                INNER JOIN `trip_image` AS img ON info.id=img.info_id AND member_id=%s;"""
+            cursor.execute(query_book_info, (userId,))
+
+            findAll = cursor.fetchall()
+            if len(findAll) > 0:
+                dateStr = findAll[0][4].strftime("%Y-%m-%d")
+
+                _result={
+                    "data":{
+                        "attraction": {
+                            "id": findAll[0][0],
+                            "name": findAll[0][1],
+                            "address": findAll[0][2],
+                            "image": findAll[0][3]
+                        },
+                        "date": dateStr,
+                        "time": findAll[0][5],
+                        "price": findAll[0][6]
+                    }
+                }
+
+            if cursor is not None:
+                cursor.close()
+
+            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
+        except Exception:
+            return False
+
+
+    async def createBookATrip(self, bookingDt, userId):
+        _result = False
+        try:
+            if self._cnx == None or self._cnx.is_connected == False:
+                self.dbConnecting()
+            cursor = self._cnx.cursor()
+
+            create_booking_info = """INSERT INTO `trip_booking` (attraction_id, member_id, book_date, book_time, price) 
+                                    VALUES (%s, %s, %s, %s, %s) ON DUPLICATE KEY 
+                                    UPDATE `attraction_id`=%s, `book_date`=%s, `book_time`=%s, `price`=%s;"""
+            create_data = (bookingDt.attractionId, userId, bookingDt.date, bookingDt.time, bookingDt.price, bookingDt.attractionId, bookingDt.date, bookingDt.time, bookingDt.price)
+
+            cursor.execute(create_booking_info, create_data)
+            if cursor.rowcount > 0:
+                _result = {"ok": True}
+                self._cnx.commit()
+            else:
+                self._cnx.rollback()
+
+            if cursor is not None:
+                cursor.close()
+
+            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
+        except Exception:
+            return False
         
+
+    async def delBookATrip(self, userId):
+        _result = False
+        try:
+            if self._cnx == None or self._cnx.is_connected == False:
+                self.dbConnecting()
+            cursor = self._cnx.cursor()
+
+            del_booking_info = """DELETE FROM `trip_booking` WHERE member_id=%s;"""
+            cursor.execute(del_booking_info, (userId,))
+
+            if cursor.rowcount == 1:
+                self._cnx.commit()
+                _result = {"ok": True}
+            else:
+                self._cnx.rollback()
+
+            if cursor is not None:
+                cursor.close()
+
+            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
+        except Exception:
+            return False
