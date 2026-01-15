@@ -8,7 +8,6 @@ async function attractionInfo() {
   const attId = parseInt(urlPathnameSplit[2], 10);
   let attInfo = null;
 
-  //console.log(attId);
   await Promise.all([fetch(`/api/attraction/${attId}`, {method: "GET"})
     .then(response => {
       return response.json();
@@ -17,8 +16,6 @@ async function attractionInfo() {
   })]).then(data => {
     attInfo=data[0].data;
   });
-
-  //console.log(attInfo);
 
   imgSlideShow(attInfo.images);
 
@@ -179,3 +176,5 @@ if (homePage){
   });
 }
 
+// 清除儲存的資料
+sessionStorage.clear();

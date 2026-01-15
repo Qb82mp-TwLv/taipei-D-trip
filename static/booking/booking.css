@@ -147,6 +147,14 @@ body{
     text-indent: 1rem;
 }
 
+.pay-input iframe{
+    height: 3.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(232, 232, 232);
+    outline: none;
+    padding-left: 1rem;
+}
+
 .contact-remark{
     font-size: 1.6rem;
     font-weight: bold;
@@ -163,6 +171,7 @@ body{
 }
 
 .pay-input-weight{
+    width: 22.5rem;
     font-weight: 500;
 }
 

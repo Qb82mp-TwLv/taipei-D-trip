@@ -1,0 +1,219 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+html{
+    font-size: 62.5%; /* 16*0.625 = 10 */
+    font-family: 'Noto Sans TC';
+}
+
+body{
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+}
+
+.ordNumber{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-text{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-self: center;
+    gap: 1.5rem;
+}
+
+.text-font{
+    font-size: 2rem;
+    font-weight: 600;
+    color: black;
+}
+
+.text-mark{
+    width: 6rem;
+    height: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.text-mark img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.text-large{
+    font-size: 2.3rem;
+    font-weight: 600;
+    color: #666666;
+}
+
+.text-medium{
+    font-size: 2.1rem;
+    font-weight: 500;
+    color: black;
+}
+
+.text-number{
+    font-weight: 600;
+}
+
+.text-samll{
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: red;
+    display: flex;
+}
+
+.text-samll div{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.content-info{
+    width: 90rem;
+    height: 13rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 1rem;
+    align-items: center;
+
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+}
+
+.info-img{
+    width: 100%;
+    height: 12rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.info-img img{
+    width: 95%;
+    height: 95%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.info-text{
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #666666;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, minmax(2.5rem, max-content));
+    gap: 0.5rem;
+    box-sizing: border-box;
+
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.info-price{
+    padding-right: 1rem;
+    padding-bottom: 0.6rem;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #666666;
+    text-align: right;
+    align-self: end;
+}
+
+@media (1200px < width <= 1920px){
+    .ordNumber-content{
+        width: 120rem;
+        /* border: 1px solid rgba(102, 102, 102, 0.6);
+        border-radius: 0.5rem; */
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-template-columns: 1fr;
+        /* 如果子層有固定寬度，就要使用下列方式，達到置中效果 */
+        justify-items: center;
+    }
+
+    .content-text{
+        width: 100rem;
+    }
+
+    .text-medium{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(auto, max-content));
+    }
+}
+
+@media (640px < width <= 1200px){
+    .ordNumber-content{
+        width: 100%;
+        min-width: 100%;
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        flex: 1;
+    }
+
+    .content-text{
+        width: 100%;
+    }
+
+    .text-medium{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(auto, max-content));
+    }
+
+    .content-info{
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (300px <= width <= 640px){
+    .ordNumber-content{
+        width: 100%;
+        min-width: 100%;
+        display: grid;
+        grid-template-rows: auto auto;
+        justify-items: center;
+        box-sizing: border-box;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        flex: 1;
+    }
+
+    .content-text{
+        width: 100%;
+    }
+
+    .text-medium{
+        display: grid;
+        grid-template-columns: repeat(1, minmax(auto, max-content));
+    }
+    
+    .content-info{
+        width: 100%;
+        height: auto;
+        display: grid;
+        grid-template-columns: auto;
+        grid-template-rows: auto minmax(10rem, 1fr) minmax(10rem, 1fr);
+    }
+
+    .info-img{
+        width: 100%;
+        height: 30rem;
+    }
+}
+
