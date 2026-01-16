@@ -287,8 +287,6 @@ async function viewATTImg(attInfo) {
 // 連接到attraction的資料頁面
 function attractionWeb() {
     const id = this.dataset.attInfoId;
-    console.log("號碼:",id);
-
     window.location.href = `/attraction/${id}`;
 }
 
@@ -377,3 +375,5 @@ async function scrollLoading() {
     }
 }
 
+// 清除儲存的資料
+sessionStorage.clear();

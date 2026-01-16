@@ -47,6 +47,15 @@ async function getReserveInfo(name, email){
     if (!response.ok || dt.data === null){
       reserveBlockOne(null, name);
     }else{
+      // 儲存一些資料
+      sessionStorage.setItem("attraction_id", dt.data.attraction.id);
+      sessionStorage.setItem("attraction_name", dt.data.attraction.name);
+      sessionStorage.setItem("attraction_address", dt.data.attraction.address);
+      sessionStorage.setItem("attraction_img", dt.data.attraction.image);
+      sessionStorage.setItem("date", dt.data.date);
+      sessionStorage.setItem("time", dt.data.time);
+      sessionStorage.setItem("price", dt.data.price);
+
       reserveBlockOne(dt.data, name);
       reserveBlockTwo(name, email);
       reserveBlockThree();
@@ -186,6 +195,7 @@ async function reserveBlockTwo(NM, Em){
       const newNameInputTag = document.createElement("input");
       newNameInputTag.type = "text";
       newNameInputTag.classList.add("contact-input");
+      newNameInputTag.id = "uName";
       newNameInputTag.value = String(NM);
       newNameTag.appendChild(newNameTitleTag);
       newNameTag.appendChild(newNameInputTag);
@@ -199,6 +209,7 @@ async function reserveBlockTwo(NM, Em){
       const newEmailInputTag = document.createElement("input");
       newEmailInputTag.type = "email";
       newEmailInputTag.classList.add("contact-input");
+      newEmailInputTag.id="uEmail";
       newEmailInputTag.value = String(Em);
       newEmailTag.appendChild(newEmailTitleTag);
       newEmailTag.appendChild(newEmailInputTag);
@@ -212,6 +223,8 @@ async function reserveBlockTwo(NM, Em){
       const newMobileInputTag = document.createElement("input");
       newMobileInputTag.type = "tel";
       newMobileInputTag.classList.add("contact-input");
+      newMobileInputTag.id = "uPhone";
+      newMobileInputTag.maxLength = 10;
       newMobileTag.appendChild(newMobileTitleTag);
       newMobileTag.appendChild(newMobileInputTag);
 
@@ -247,13 +260,10 @@ async function reserveBlockThree(){
       // 卡片的標籤下的其他標籤
       const newNumberTitleTag = document.createElement("div");
       newNumberTitleTag.textContent = "卡片號碼：";
-      const newNumberInputTag = document.createElement("input");
-      newNumberInputTag.type = "text";
+      const newNumberInputTag = document.createElement("div");
       newNumberInputTag.classList.add("pay-input");
       newNumberInputTag.classList.add("pay-input-weight");
-      newNumberInputTag.placeholder = "**** **** **** ****";
-      newNumberInputTag.maxLength = "19";
-      newNumberInputTag.autocomplete = "cc-number";
+      newNumberInputTag.id= "card-Num";
       newNumberTag.appendChild(newNumberTitleTag);
       newNumberTag.appendChild(newNumberInputTag);
 
@@ -263,11 +273,10 @@ async function reserveBlockThree(){
       // 過期時間的標籤下的其他標籤
       const newTimeTitleTag = document.createElement("div");
       newTimeTitleTag.textContent = "過期時間：";
-      const newTimeInputTag = document.createElement("input");
-      newTimeInputTag.type = "text";
+      const newTimeInputTag = document.createElement("div");
       newTimeInputTag.classList.add("pay-input");
       newTimeInputTag.classList.add("pay-input-weight");
-      newTimeInputTag.placeholder = "MM / YY";
+      newTimeInputTag.id = "card-exp-date";
       newTimeTag.appendChild(newTimeTitleTag);
       newTimeTag.appendChild(newTimeInputTag);
 
@@ -277,11 +286,10 @@ async function reserveBlockThree(){
       // 驗證密碼的標籤下的其他標籤
       const newPwTitleTag = document.createElement("div");
       newPwTitleTag.textContent = "驗證密碼：";
-      const newPwInputTag = document.createElement("input");
-      newPwInputTag.type = "password";
+      const newPwInputTag = document.createElement("div");
       newPwInputTag.classList.add("pay-input");
       newPwInputTag.classList.add("pay-input-weight");
-      newPwInputTag.placeholder = "CVV";
+      newPwInputTag.id= "card-cvv";
       newPwTag.appendChild(newPwTitleTag);
       newPwTag.appendChild(newPwInputTag);
 

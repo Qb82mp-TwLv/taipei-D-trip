@@ -420,3 +420,145 @@ class connectDB:
             return False
         except Exception:
             return False
+        
+    async def createOrderInfo(self, ordInfo, ordNum, userId):
+        _result = False
+        try:
+            if self._cnx == None or self._cnx.is_connected == False:
+                self.dbConnecting()
+            cursor = self._cnx.cursor()
+
+            create_order_info = """INSERT INTO `trip_order` (order_number, att_id, book_date, book_time, price, member_id, phone, pay_status)
+                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"""
+            
+            att_id = ordInfo.order["trip"]["attraction"]["id"]
+            book_date = ordInfo.order["trip"]["date"]
+            book_time = ordInfo.order["trip"]["time"]
+            price = ordInfo.order["price"]
+            phone=ordInfo.order["contact"]["phone"]
+            create_data = (ordNum, att_id, book_date, book_time, price, userId, phone, "UNPAID")
+
+            cursor.execute(create_order_info, create_data)
+            if cursor.rowcount == 1:
+                self._cnx.commit()
+                _result = True
+            else:
+                self._cnx.rollback()
+
+            if cursor is not None:
+                cursor.close()
+
+            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
+        except Exception:
+            return False
+        
+    async def orderPayStatus(self, ordNum, userId):
+        try: 
+            if self._cnx == None or self._cnx.is_connected == False:
+                self.dbConnecting()
+            cursor = self._cnx.cursor()
+
+            upd_order_info = """UPDATE `trip_order`
+                                SET pay_status='PAID'
+                                WHERE order_number=%s AND member_id=%s;"""
+            upd_data = (ordNum, userId)
+
+            cursor.execute(upd_order_info, upd_data)
+            if cursor.rowcount == 1:
+                self._cnx.commit()
+            else:
+                self._cnx.rollback()
+
+            if cursor is not None:
+                cursor.close()
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+        except Exception as e:
+            print(e)
+         
+    
+    async def createPayInfo(self, ordNum, payId, userId, status):
+        _result = False
+        try:
+            if self._cnx == None or self._cnx.is_connected == False:
+                self.dbConnecting()
+            cursor = self._cnx.cursor()
+
+            creat_pay_info = """INSERT INTO `trip_pay` (order_number, payment_id, status, member_id)
+                                VALUES (%s, %s, %s, %s);"""     
+            create_data = (ordNum, payId, status, userId)
+
+            cursor.execute(creat_pay_info, create_data)
+            if cursor.rowcount == 1:
+                self._cnx.commit()
+                _result = True
+            else:
+                self._cnx.rollback()
+
+            if cursor is not None:
+                cursor.close()
+
+            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
+        except Exception:
+            return False
+        
+
+    async def queryOrderInfo(self, ordNum, user):
+        _result = False
+        try:
+            if self._cnx == None or self._cnx.is_connected == False:
+                self.dbConnecting()
+            cursor = self._cnx.cursor()
+
+            query_ord_info = """SELECT * FROM (SELECT ord.order_number AS ordNum, ord.att_id, info.name, info.address, img.file, ord.book_date, ord.book_time, ord.price, ord.pay_status, ord.phone 
+                                FROM `trip_order`AS ord 
+                                INNER JOIN `trip_information` AS info ON info.id=ord.att_id
+                                INNER JOIN `trip_image` AS img ON info.id=img.info_id AND ord.member_id=%s) AS membOrd WHERE membOrd.ordNum=%s;"""
+            query_data = (user["id"], ordNum)
+           
+            cursor.execute(query_ord_info, query_data)
+            findAll = cursor.fetchall()
+ 
+            if findAll != []:
+                payStatus = 1               
+                if findAll[0][8] == "PAID":
+                    payStatus = 0
+
+                _result = {
+                    "data": {
+                        "number": ordNum,
+                        "price": findAll[0][7],
+                        "trip": {
+                            "attraction": {
+                                "id": findAll[0][1],
+                                "name": findAll[0][2],
+                                "address": findAll[0][3],
+                                "image": findAll[0][4]
+                            },
+                            "date": findAll[0][5],
+                            "time": findAll[0][6]
+                        },
+                        "contact": {
+                            "name": user["name"],
+                            "email": user["email"],
+                            "phone": findAll[0][9]
+                        },
+                        "status": payStatus
+                    }
+                }
+            
+            if cursor is not None:
+                cursor.close()
+            
+            return _result
+        except OperationalError:
+            self._cnx.reconnect(attempts=2, delay=3)
+            return False
+        except Exception:
+            return False
