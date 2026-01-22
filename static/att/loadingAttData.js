@@ -206,7 +206,12 @@ if (homePage){
   homePage.addEventListener("click", function() {
     try{
       openLoadDialog();
-      window.location.href = `/`;
+      // 延遲讓瀏覽器可以有時間重新繪製
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          window.location.href = `/`;
+        }, 300);
+      });
     }catch{
       closeLoadDialog()
     }finally{

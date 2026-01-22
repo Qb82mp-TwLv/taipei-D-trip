@@ -456,11 +456,36 @@ async function scrollLoading() {
     }
 }
 
+const loadingDialog = document.querySelector(".loading_dialog");    
+async function openLoadDialog() {
+    if (loadingDialog){
+        loadingDialog.showModal();
+    }
+};
+
+async function closeLoadDialog() {
+    if (loadingDialog){
+        loadingDialog.close();
+    }
+};
+
 // 點擊"台北一日遊"的文字，會返回主頁
 const homePage = document.querySelector(".Nav-title");
 if (homePage){
     homePage.addEventListener("click", function() {
-        window.location.href = `/`;
+        openLoadDialog();
+        try{
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    window.location.href = `/`;
+                }, 300);
+            });
+        }catch{
+            closeLoadDialog();
+        }finally{
+            closeLoadDialog();
+        }
+        
     });
 }
 
