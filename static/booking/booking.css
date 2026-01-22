@@ -245,7 +245,6 @@ body{
     animation: circle-load 0.8s linear infinite;
 }
 
-
 @keyframes circle-load{
     0% {
         border-left: 5px solid #666666;

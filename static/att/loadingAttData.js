@@ -187,11 +187,32 @@ if (radioPM){
   });
 }
 
+const loadingDialog = document.querySelector(".loading_dialog");    
+async function openLoadDialog() {
+    if (loadingDialog){
+        loadingDialog.showModal();
+    }
+}
+
+async function closeLoadDialog() {
+    if (loadingDialog){
+        loadingDialog.close();
+    }
+}
+
 // 點擊"台北一日遊"的文字，會返回主頁
 const homePage = document.querySelector(".Nav-title");
 if (homePage){
   homePage.addEventListener("click", function() {
-    window.location.href = `/`;
+    try{
+      openLoadDialog();
+      window.location.href = `/`;
+    }catch{
+      closeLoadDialog()
+    }finally{
+      closeLoadDialog();
+    }
+    
   });
 }
 
