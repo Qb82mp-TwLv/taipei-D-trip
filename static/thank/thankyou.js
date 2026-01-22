@@ -10,50 +10,54 @@ getOrderNum();
 // 根據收到的訂單編號，確認訂單資訊
 async function getOrderNum() {
     const token = localStorage.getItem("token");
-    try{
-        // http://xxxxxxx:8000/thankyou?number=訂單編號
-        const urlStr = new URL(window.location.href);
-        // ?number=訂單編號
-        // 找出網址中搜尋的參數值
-        const urlSearchName = String(urlStr.search);
-        const urlSearchNameSplit = urlSearchName.split("=");
-        const orderNumber = urlSearchNameSplit[1];
-        
-        const response = await fetch(`/api/order/${orderNumber}`, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
+    if (token !== null){
+        try{
+            // http://xxxxxxx:8000/thankyou?number=訂單編號
+            const urlStr = new URL(window.location.href);
+            // ?number=訂單編號
+            // 找出網址中搜尋的參數值
+            const urlSearchName = String(urlStr.search);
+            const urlSearchNameSplit = urlSearchName.split("=");
+            const orderNumber = urlSearchNameSplit[1];
+            
+            const response = await fetch(`/api/order/${orderNumber}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
 
-        const dt = await response.json();
+            const dt = await response.json();
 
-        if (!response.ok || dt.error !== undefined){
-            window.location.href = "/";
-        }else{
-            if (dt.data === null){
-                const contentText = document.querySelector(".content-text");
-                contentText.classList.add("text-font");
-                contentText.textContent="抱歉，訂單紀錄並未有記錄此筆訂單。";
-                const contentInfo = document.querySelector(".content-info");
-                contentInfo.className="";
+            if (!response.ok || dt.error !== undefined){
+                window.location.href = "/";
             }else{
-                createWeb(dt.data);
+                if (dt.data === null){
+                    const contentText = document.querySelector(".content-text");
+                    contentText.classList.add("text-font");
+                    contentText.textContent="抱歉，訂單紀錄並未有記錄此筆訂單。";
+                    const contentInfo = document.querySelector(".content-info");
+                    contentInfo.className="";
+                }else{
+                    createWeb(dt.data);
+                }
             }
+        }catch{
+            window.location.href = `/`;
         }
-    }catch{
-        window.location.href = "/";
+    }else{
+        window.location.href = `/`;
     }
+    
 }
 
 async function createWeb(dt) {
     const contentText = document.querySelector(".content-text");
     if (contentText){
         let textLargeStr = "";
-
         const newTextMarkTag = document.createElement("div");
         newTextMarkTag.classList.add("text-mark");
-        const newTextMarkImgTag = document.createElement("img");
+        const newTextMarkImgTag = new Image();
         newTextMarkImgTag.id = "markImg";
         if (dt.status === 0){
             newTextMarkImgTag.src = "/static/img/mark.png";
@@ -94,9 +98,27 @@ async function createWeb(dt) {
     if(contentInfo){
         const newInfoImgCTNTag = document.createElement("div");
         newInfoImgCTNTag.classList.add("info-img");
+        // loading
+        const newLoadingStrTag = document.createElement("div");
+        newLoadingStrTag.classList.add("load-CTN");
+        const newLoadingImgTag = document.createElement("div");
+        newLoadingImgTag.classList.add("CTN-img");
+        newLoadingStrTag.appendChild(newLoadingImgTag);
         const newInfoImgTag = document.createElement("img");
         newInfoImgTag.src = dt.trip.attraction.image;
+        newInfoImgTag.style.display = "none";
+        newInfoImgCTNTag.appendChild(newLoadingStrTag);
         newInfoImgCTNTag.appendChild(newInfoImgTag);
+        newInfoImgTag.addEventListener("load", function() {
+            newLoadingStrTag.style.display = "none";
+            newInfoImgTag.style.display = "block";
+        });
+
+        newInfoImgTag.addEventListener("error", function() {
+            newLoadingStrTag.style.display = "none";
+            newInfoImgTag.style.display = "block";
+            newInfoImgTag.src = "/static/img/photo.png";
+        });
 
         const newInfoTextTag = document.createElement("div");
         newInfoTextTag.classList.add("info-text");

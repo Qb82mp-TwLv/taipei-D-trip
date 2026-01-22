@@ -39,9 +39,27 @@ async function imgSlideShow(arr) {
         // </div>
         const newTagImgCTNDiv = document.createElement("div");
         newTagImgCTNDiv.classList.add("img-width-fat");
+        // loading
+        const newloadingStrTag = document.createElement("div");
+        newloadingStrTag.classList.add("load-CTN");
+        const newloadingImgTag = document.createElement("div");
+        newloadingImgTag.classList.add("CTN-img");
+        newloadingStrTag.appendChild(newloadingImgTag);
         const newTagImg = new Image();
         newTagImg.src = arr[i];
+        newTagImg.style.display = "none";
+        newTagImg.addEventListener('load', function() {
+            newloadingStrTag.style.display = "none";
+            newTagImg.style.display = "block";
+        });
 
+        newTagImg.addEventListener('error', function() {
+            newloadingStrTag.style.display = "none";
+            newTagImg.src = "/static/img/photo.png";
+            newTagImg.style.display = "block";
+        });
+
+        newTagImgCTNDiv.appendChild(newloadingStrTag);
         newTagImgCTNDiv.appendChild(newTagImg);
 
         // 範例
@@ -169,6 +187,7 @@ if (radioPM){
   });
 }
 
+// 點擊"台北一日遊"的文字，會返回主頁
 const homePage = document.querySelector(".Nav-title");
 if (homePage){
   homePage.addEventListener("click", function() {

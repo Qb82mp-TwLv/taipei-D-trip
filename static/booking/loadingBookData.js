@@ -58,6 +58,8 @@ async function getReserveInfo(name, email){
 
       reserveBlockOne(dt.data, name);
       reserveBlockTwo(name, email);
+      verifyEmail();
+      verifyTelPhone();
       reserveBlockThree();
       reserveBlockFour(dt.data.price);
     }
@@ -82,9 +84,27 @@ async function reserveBlockOne(dt, NM){
       }else{
         userNM.textContent = String(NM);
 
+        // loading
+        const newLoadingStrTag = document.createElement("div");
+        newLoadingStrTag.classList.add("load-CTN");
+        const newLoadingImgTag = document.createElement("div");
+        newLoadingImgTag.classList.add("CTN-img");
+        newLoadingStrTag.appendChild(newLoadingImgTag);
         const newImgTag = new Image();
         newImgTag.src = dt.attraction.image;
+        newImgTag.style.display = "none";
+        viewImgStr.appendChild(newLoadingStrTag);
         viewImgStr.appendChild(newImgTag);
+        newImgTag.addEventListener("load", function() {
+            newLoadingStrTag.style.display = "none";
+            newImgTag.style.display = "block";
+        });
+
+        newImgTag.addEventListener("error", function() {
+            newLoadingStrTag.style.display = "none";
+            newImgTag.style.display = "block";
+            newImgTag.src = "/static/img/photo.png";
+        });
 
         const newImgTextTag = document.createElement("div");
         newImgTextTag.classList.add("imgStr-text");
@@ -196,6 +216,7 @@ async function reserveBlockTwo(NM, Em){
       newNameInputTag.type = "text";
       newNameInputTag.classList.add("contact-input");
       newNameInputTag.id = "uName";
+      newNameInputTag.maxLength = 60;
       newNameInputTag.value = String(NM);
       newNameTag.appendChild(newNameTitleTag);
       newNameTag.appendChild(newNameInputTag);
@@ -210,9 +231,14 @@ async function reserveBlockTwo(NM, Em){
       newEmailInputTag.type = "email";
       newEmailInputTag.classList.add("contact-input");
       newEmailInputTag.id="uEmail";
+      newEmailInputTag.maxLength=254;
       newEmailInputTag.value = String(Em);
+      const newEmailFormatStrTag = document.createElement("div");
+      newEmailFormatStrTag.id="uEmailStr";
+      newEmailFormatStrTag.textContent="✔️";
       newEmailTag.appendChild(newEmailTitleTag);
       newEmailTag.appendChild(newEmailInputTag);
+      newEmailTag.appendChild(newEmailFormatStrTag);
 
       // 手機號碼部分
       const newMobileTag = document.createElement("div");
@@ -225,8 +251,11 @@ async function reserveBlockTwo(NM, Em){
       newMobileInputTag.classList.add("contact-input");
       newMobileInputTag.id = "uPhone";
       newMobileInputTag.maxLength = 10;
+      const newMobileFormatStrTag = document.createElement("div");
+      newMobileFormatStrTag.id = "uPhoneStr";
       newMobileTag.appendChild(newMobileTitleTag);
       newMobileTag.appendChild(newMobileInputTag);
+      newMobileTag.appendChild(newMobileFormatStrTag);
 
       // 備註資訊
       const newRemarkTag = document.createElement("div");
@@ -347,15 +376,7 @@ async function delBookInfo() {
         const viewPay = document.querySelector(".reserve-pay");
         const reservedCTN4 = document.querySelector(".reserve-ctn4");
 
-        if (viewImgStr && viewContact && viewPay){
-          // 刪除新增的子標籤
-          viewImgStr.removeChild(viewImgStr.firstChild);
-          viewContact.removeChild(viewContact.firstChild);
-          viewPay.removeChild(viewPay.firstChild);
-          reservedCTN4.removeChild(reservedCTN4.firstChild);
-
-          viewImgStr.textContent = "目前沒有任何待預訂的行程";
-          reviseStyle();
+        if (viewImgStr && viewContact && viewPay && reservedCTN4){
           // 重新執行設定頁面
           location.reload();
         }
@@ -363,8 +384,53 @@ async function delBookInfo() {
     }
   }catch{
     alert("刪除失敗，請稍後再試。");
-  };
+  }
 };
+
+// 驗證電子郵件(若使用者修改，可以進行驗證格式)
+async function verifyEmail() {
+  const Em = document.getElementById("uEmail");
+  const EmStr = document.getElementById("uEmailStr");
+  if (Em){
+    Em.addEventListener("input", function() {
+      try{
+        let emailValue = Em.value;
+        if (/^[A-Za-z]+[A-Za-z0-9]+((\_|\.)[A-Za-z0-9]+)*\@[A-Za-z0-9]+(\.[A-Za-z]+)+$/.test(emailValue) === false){
+          EmStr.textContent = "❌";
+          return;
+        }
+
+        EmStr.textContent = "✔️";
+      }catch{
+        console.log("驗證功能有問題");
+      }
+     
+    });
+    
+  }
+}
+
+// 驗證手機的規則
+async function verifyTelPhone() {
+  const tel = document.getElementById("uPhone");
+  const telStr = document.getElementById("uPhoneStr");
+  if (tel){
+    tel.addEventListener("input", function() {
+      try{
+        let telValue = tel.value;
+        // \d代表數字，{7}重複7次
+        if (/^09[1-9]\d{7}$/.test(telValue) === false){
+          telStr.textContent = "❌";
+          return;
+        }
+
+        telStr.textContent = "✔️";
+      }catch{
+        console.log("驗證功能有問題");
+      }
+    });
+  }
+}
 
 
 async function reviseStyle() {

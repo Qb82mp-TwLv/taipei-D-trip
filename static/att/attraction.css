@@ -86,6 +86,10 @@ html{
     opacity: 0.7;
 }
 
+.leftBtn:hover, .rightBtn:hover{
+    opacity: 1;
+}
+
 .slideBar{
     width: 100%;
     height: 0.5rem;
@@ -196,6 +200,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{
     background-image: url(/static/img/icon_calendar.png);
     transform: scale(1.4);
     transform-origin: center;
+    cursor: pointer;
 }
 
 .order-time{
@@ -237,6 +242,11 @@ input[type="date"]::-webkit-calendar-picker-indicator{
     cursor: pointer;
 }
 
+.order-btn:hover{
+    font-weight: 600;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
 .att-introduction{
     height: 100%;
     display: flex;
@@ -276,6 +286,44 @@ input[type="date"]::-webkit-calendar-picker-indicator{
 
 .traffic-padd{
     padding-bottom: 0.6rem;
+}
+
+.load-CTN{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.CTN-img{
+    width: 5rem;
+    height: 5rem;
+    border-radius: 5rem;
+    border-left: 5px solid #eee;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid transparent;
+    
+    animation: circle-load 1s linear infinite;
+}
+
+@keyframes circle-load{
+    0% {
+        transform: rotate(0deg);
+    }20% {
+        transform: rotate(72deg);
+    }40%{
+        transform: rotate(144deg);
+    }60%{
+        transform: rotate(216deg); 
+    }80% {
+        transform: rotate(288deg);
+    }100%{
+        transform: rotate(360deg);
+    }
 }
 
 @media (1200px < width <= 1920px){

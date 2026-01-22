@@ -51,6 +51,7 @@ async function reservedTrip(){
                     "price": price
                 }
 
+                // 只要是空字串、null、undefiined...，就都為false
                 if (attId && dateStr && timeStr && price){
                     // 建立預訂資訊製購物車
                     const response = await fetch("/api/booking",{
@@ -72,7 +73,7 @@ async function reservedTrip(){
                     
                 }else{
                     console.log("預訂失敗");
-                    alert("行程預訂失敗，請稍後再預訂，謝謝您。");
+                    alert("行程預訂失敗，請確認該填寫、選擇的資訊都已填寫，謝謝您。");
                 }
             }else{
                 console.log("預訂失敗");

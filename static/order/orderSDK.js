@@ -79,59 +79,85 @@ async function getPrimeFromTPD() {
                 alert("現在無法購買，請稍後再到此頁面購買，謝謝您。");
                 return;
             }
+
+            // loading處理中
+            openLoadDialog();
             orderTrip(result.card.prime);
         });
     }catch{
         alert("現在無法購買，請稍後再到此頁面購買，謝謝您。");
+    }finally{
+        closeLoadDialog();
     }
 }
 
 async function orderTrip(prime) {
-    const uName= document.getElementById("uName").value.trim();
-    const uEmail = document.getElementById("uEmail").value.trim();
-    const uPhone = document.getElementById("uPhone").value.trim();
+    try{
+        const uName= document.getElementById("uName").value.trim();
+        const uEmail = document.getElementById("uEmail").value.trim();
+        const uPhone = document.getElementById("uPhone").value.trim();
 
-    const orderJSON = {
-            "prime": prime,
-            "order":{
-                "price": sessionStorage.getItem("price"),
-                "trip": {
-                    "attraction": {
-                        "id": sessionStorage.getItem("attraction_id"),
-                        "name": sessionStorage.getItem("attraction_name"),
-                        "address": sessionStorage.getItem("attraction_address"),
-                        "image": sessionStorage.getItem("attraction_img")
+        const orderJSON = {
+                "prime": prime,
+                "order":{
+                    "price": parseInt(sessionStorage.getItem("price")),
+                    "trip": {
+                        "attraction": {
+                            "id": parseInt(sessionStorage.getItem("attraction_id")),
+                            "name": sessionStorage.getItem("attraction_name"),
+                            "address": sessionStorage.getItem("attraction_address"),
+                            "image": sessionStorage.getItem("attraction_img")
+                        },
+                        "date": sessionStorage.getItem("date"),
+                        "time": sessionStorage.getItem("time")
                     },
-                    "date": sessionStorage.getItem("date"),
-                    "time": sessionStorage.getItem("time")
-                },
-                "contact": {
-                    "name": uName,
-                    "email": uEmail,
-                    "phone": uPhone
+                    "contact": {
+                        "name": uName,
+                        "email": uEmail,
+                        "phone": uPhone
+                    }
                 }
             }
+
+        const token = localStorage.getItem("token");
+        const response = await fetch("/api/orders", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(orderJSON),
+        });
+
+        const dt = await response.json();
+
+        if (!response.ok || dt.error !== undefined){
+            alert("建立訂單失敗或其他因素，所以並未建立此訂單，請稍後再試，感謝您。");
+        }else{
+            // 清除
+            sessionStorage.clear();
+            const orderNb = dt.data.number;
+            window.location.href = `/thankyou?number=${orderNb}`;
         }
+    }catch{
+        console.log("訂購發生錯誤");
+        alert("下訂過程失敗，請稍後再試，感謝您。");
+    }finally{
+        closeLoadDialog();
+    }
 
-    const token = localStorage.getItem("token");
-    const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(orderJSON),
-    });
+}
 
-    const dt = await response.json();
+const loadDialog = document.querySelector(".loading_dialog");
+async function openLoadDialog() {
+    if (loadDialog){
+        loadDialog.showModal();
+    }
+}
 
-    if (!response.ok || dt.error !== undefined){
-        alert("建立訂單失敗或其他因素，所以並未建立此訂單，請稍後再試，感謝您。");
-    }else{
-        // 清除
-        sessionStorage.clear();
-        const orderNb = dt.data.number;
-        window.location.href = `/thankyou?number=${orderNb}`;
+async function closeLoadDialog() {
+    if (loadDialog){
+        loadDialog.close();
     }
 }
 
@@ -169,15 +195,27 @@ async function mutationObsGetBtn(){
                 observeBtn.disconnect();
                 // 取得APP的資訊，
                 buyItinerary.addEventListener("click", function() {
-                    const inputStatus = TPDirect.card.getTappayFieldsStatus();
-                    
-                    if (inputStatus.canGetPrime !== true){
-                        alert("請確認輸入的信用卡資訊是否正確，謝謝。");
-                        return
-                    }
+                    const EmStr = document.getElementById("uEmailStr");
+                    const telStr = document.getElementById("uPhoneStr");
 
-                    getPrimeFromTPD();
-                })
+                    // 判斷是否都已填寫
+                    if (EmStr.textContent && telStr.textContent){
+                        // 判斷信箱與手機格式是否正確
+                        if (EmStr.textContent=== "✔️" && telStr.textContent === "✔️"){                           
+                            const inputStatus = TPDirect.card.getTappayFieldsStatus();
+                
+                            if (inputStatus.canGetPrime !== true){
+                                alert("請確認輸入的信用卡資訊是否正確，謝謝。");
+                                return;
+                            }
+
+                            getPrimeFromTPD();
+                            return;
+                        }
+                    };
+
+                    alert("請確認『聯絡資訊』都已填，且格是正確無誤");
+                });
             }
         })
     });

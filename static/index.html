@@ -13,7 +13,7 @@
   <body>
     <nav class="Nav Nav-height">
       <div class="Nav-content">
-        <div class="Nav-title">台北一日遊</div>
+        <div class="Nav-title Nav-title-btn">台北一日遊</div>
         <div class="Nav Nav-btn">
           <button class="btn-appearance" id="shoppingCart_btn">預定行程</button>
           <button class="btn-sign" id="member_btn">登入/註冊</button>
@@ -85,6 +85,10 @@
       </div>
     </div>
 
+    <div class="load-animation">
+      <div class="load-text">Loading</div>
+    </div>
+
     <footer id="footerBlock">
       <div>COPYRIGHT © 2021 台北一日遊</div>
     </footer>
@@ -101,13 +105,13 @@
         </div>
         <div class="dialog_third">
           <div class="third_operationPart opt1">
-            <input type="text" class="operationPart_name" id="nameStr" placeholder="輸入姓名">
+            <input type="text" class="operationPart_name" id="nameStr" placeholder="輸入姓名" maxlength="60">
           </div>
           <div class="third_operationPart opt2">
-            <input type="email" class="operationPart_email" id="emailStr" placeholder="輸入電子信箱">
+            <input type="email" class="operationPart_email" id="emailStr" placeholder="輸入電子信箱" maxlength="254">
           </div>
           <div class="third_operationPart opt3">
-            <input type="password" class="operationPart_pw" id="pwStr" placeholder="輸入密碼">
+            <input type="password" class="operationPart_pw" id="pwStr" placeholder="輸入密碼" maxlength="100">
           </div>
           <div class="third_operationPart signin_btn">
             <button type="button">註冊新帳戶</button>

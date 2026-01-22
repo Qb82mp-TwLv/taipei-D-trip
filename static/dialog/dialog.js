@@ -133,11 +133,26 @@ class dialogLog {
         this.errStr.textContent = "";
     }
 
+    async errTextView(textView){
+        this.errStr.style.display = "block";
+        this.errStr.textContent = String(textView);
+    }
     
     async logIn() {
         const emailObj = document.getElementById("emailStr").value.trim();
         const pwObj = document.getElementById("pwStr").value.trim();
         if (emailObj !== "" && pwObj !== ""){
+            // 驗證email的格式
+            if ((/^[A-Za-z]+[A-Za-z0-9]+((\_|\.)[A-Za-z0-9]+)*\@[A-Za-z0-9]+(\.[A-Za-z]+)+$/.test(emailObj)) === false || (emailObj.length > 254)){
+                this.errTextView("電子信箱的格式有錯誤");
+                return;
+            }
+            // 驗證密碼長度
+            if (pwObj.length > 100){
+                this.errTextView("密碼長度過長");
+                return;
+            }
+
             const jsonDt = {
                 "email": emailObj,
                 "password": pwObj
@@ -178,6 +193,22 @@ class dialogLog {
         const pwObj = document.getElementById("pwStr").value.trim();
 
         if (nameObj !== "" && emailObj !== "" && pwObj !== ""){
+            // 驗證名字長度
+            if (nameObj.length > 60){
+                this.errTextView("輸入的姓名長度過長");
+                return;
+            }
+            // 驗證email的格式
+            if ((/^[A-Za-z]+[A-Za-z0-9]+((\_|\.)[A-Za-z0-9]+)*\@[A-Za-z0-9]+(\.[A-Za-z]+)+$/.test(emailObj) === false) || (emailObj.length > 254)){
+                this.errTextView("電子郵件格式有問題");
+                return;
+            }
+            // 驗證密碼長度
+            if (pwObj.length > 100){
+                this.errTextView("密碼長度過長");
+                return;
+            }
+
             const jsonDt = {
                 "name": nameObj,
                 "email": emailObj,

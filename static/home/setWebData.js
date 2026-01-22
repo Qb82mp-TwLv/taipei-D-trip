@@ -160,6 +160,7 @@ async function searchATT() {
     let searchStr = "";
     nextPageArr = [];
 
+    let attArrary = [];
     // 分類與關鍵字的部分
     if (CAT && mrtNmStr){
         if (CAT.textContent === "全部分類"){
@@ -179,27 +180,48 @@ async function searchATT() {
         };
     };
 
+    // loading動畫
+    const loadStr = document.querySelector(".load-animation");
     try{
         // 延遲300毫秒
         await new Promise(delay => setTimeout(delay, 300));
-
+        
         const response = await fetch("/api/attractions"+searchStr, {method: "GET"})
         if (!response.ok){
-            console.log("抱歉，在查詢類別與關鍵字時，發生查詢錯誤，請稍後再試。");
+            alert("抱歉，在查詢類別與關鍵字時，發生查詢錯誤，請稍後再試。");
         }
 
         const dtJson = await response.json();
         removeATTImg();
+        loadStr.classList.add('load-animation-show');
         if ("data" in dtJson){
             nextPageArr.push(0);
             nextPage = dtJson.nextPage;
-            viewATTImg(dtJson.data);
+            attArrary = await viewATTImg(dtJson.data);
         }else if ("error" in dtJson){
-            notFoundATT();
+            attArrary = await notFoundATT();
         }
     }catch (err){
-        console.log("抱歉，在查詢類別與關鍵字時，發生查詢錯誤，請稍後再試。");
-    };
+        alert("抱歉，在查詢類別與關鍵字時，發生查詢錯誤，請稍後再試。");
+    }finally{
+        // 停止動畫
+        loadStr.classList.remove('load-animation-show');
+        if (attArrary.length !== 0){
+            if (attArrary[0] === "noD-content"){
+                const objTag = document.querySelector(".noD-content");
+                if (objTag){
+                    objTag.style.display = "block";
+                }
+            }else{
+                for (let i=0; i < attArrary.length; i++){
+                    const objTag = document.querySelector(`[data-att-info-id="${attArrary[i]}"]`);
+                    if (objTag){
+                        objTag.style.display = "block";
+                    }
+                }
+            }
+        }
+    }
 };
 
 // 使用搜尋按鈕搜尋景點資訊
@@ -235,6 +257,7 @@ async function removeATTImg(){
 
 // 將景點資料顯示於頁面中間
 async function viewATTImg(attInfo) {
+    const attArr = [];
     const attImgCTN = document.getElementById("imgCTN");
     if (attImgCTN){
         if (attInfo.length > 0){
@@ -245,9 +268,26 @@ async function viewATTImg(attInfo) {
 
                 let newTagTitle = document.createElement("div");
                 newTagTitle.classList.add("img-title");
+                // loading
+                const newloadingStrTag = document.createElement("div");
+                newloadingStrTag.classList.add("img-load-CTN");
+                const newloadingImgTag = document.createElement("div");
+                newloadingImgTag.classList.add("load-img");
+                newloadingStrTag.appendChild(newloadingImgTag);
                 let newTagFile = new Image();
                 newTagFile.classList.add("img-file");
                 newTagFile.src = attInfo[i].images[0];
+                newTagFile.style.display = "none";
+                newTagFile.addEventListener("load", function() {
+                    newloadingStrTag.style.display = "none";
+                    newTagFile.style.display = "block";
+                });
+
+                newTagFile.addEventListener("error", function() {
+                    newloadingStrTag.style.display = "none";
+                    newTagFile.style.display = "block";
+                    newTagFile.src = "/static/img/photo.png";
+                });
                 let newTagTitleName = document.createElement("div");
                 newTagTitleName.classList.add("title-name");
                 let newTagNameStr = document.createElement("span");
@@ -255,6 +295,7 @@ async function viewATTImg(attInfo) {
                 newTagTitleName.appendChild(newTagNameStr);
                 newTagTitle.appendChild(newTagFile);
                 newTagTitle.appendChild(newTagTitleName);
+                newTagTitle.appendChild(newloadingStrTag);
 
                 let newTagInfo = document.createElement("div");
                 newTagInfo.classList.add("img-info");
@@ -275,13 +316,17 @@ async function viewATTImg(attInfo) {
 
                 newTagBlock.appendChild(newTagTitle);
                 newTagBlock.appendChild(newTagInfo);
+                newTagBlock.style.display = "none";
 
                 attImgCTN.appendChild(newTagBlock);
+                attArr.push(attInfo[i].id);
 
                 newTagBlock.addEventListener("click", attractionWeb);
             };
         };
     };
+
+    return attArr;
 };
 
 // 連接到attraction的資料頁面
@@ -293,6 +338,7 @@ function attractionWeb() {
 
 // 若沒有資料要顯示無查詢到相關資料的解釋
 async function notFoundATT(){
+    const attArr = []
     const attCTN = document.getElementById("imgFW");
     if (attCTN){
         const newTagBlock = document.createElement("div");
@@ -301,18 +347,33 @@ async function notFoundATT(){
         const newTagStr = document.createElement("div");
         newTagStr.textContent = "抱歉，無查詢到相關資料";
         newTagBlock.appendChild(newTagStr);
+        newTagBlock.style.display = "none";
 
         attCTN.appendChild(newTagBlock);
+        attArr.push("noD-content");
+
+        return attArr;
     };
+
+    return attArr;
 };
 
 
 // 設定滑軌可見footer的部分
 async function callLoadingATT(tag) {
+    let attArrary = [];
     // 使用isIntersecting的方式判斷該物件，是否有根據條件全部顯示在視窗中，
     // 若全部顯示於視窗中，才會繼續往下執行
     if (tag[0].isIntersecting){
         if (nextPage !== null && nextPageArr.includes(nextPage) !== true){
+            // loading動畫
+            const loadStr = document.querySelector(".load-animation");
+            loadStr.classList.add('load-animation-show');
+
+            const timeoutSet = setTimeout(() => {
+                loadStr.classList.remove('load-animation-show');
+            }, 2000);
+
             const CAT = document.getElementById("categoryName");
             const mrtNmStr = document.getElementById("searInpt"); 
             let searchStr = "";
@@ -344,18 +405,38 @@ async function callLoadingATT(tag) {
 
                 const response = await fetch("/api/attractions"+searchStr, {method: "GET"})
                 if (!response.ok){
-                    console.log("抱歉，在查詢類別與關鍵字時，發生查詢錯誤，請稍後再試。");
-                }
+                    alert("抱歉，在查詢類別與關鍵字時，發生查詢錯誤，請稍後再試。");
+                }               
 
                 const dtJson = await response.json();
                 if ("data" in dtJson){
                     nextPage = dtJson.nextPage;
-                    viewATTImg(dtJson.data);
+                    attArrary= await viewATTImg(dtJson.data);
                 }else if ("error" in dtJson){
-                    notFoundATT();
+                    attArrary=await notFoundATT();
                 }
             }catch (err){
-                console.log("抱歉，在查詢類別與關鍵字時，發生查詢錯誤，請稍後再試。");
+                alert("抱歉，在查詢類別與關鍵字時，發生查詢錯誤，請稍後再試。");
+            }finally{
+                // 停止動畫
+                clearTimeout(timeoutSet);
+                loadStr.classList.remove('load-animation-show');
+                if (attArrary.length !== 0){
+                    if (attArrary[0] === "noD-content"){
+                        const objTag = document.querySelector(".noD-content");
+                        if (objTag){
+                            objTag.style.display = "block";
+                        }
+                    }else{
+                        for (let i=0; i < attArrary.length; i++){
+                            const objTag = document.querySelector(`[data-att-info-id="${attArrary[i]}"]`);
+                            if (objTag){
+                                objTag.style.display = "block";
+                            }
+                        }
+                    }
+                }
+                
             };
         }
     }
@@ -365,7 +446,7 @@ scrollLoading();
 // 監控滑軌是否footer的部分有全部出現在viewport
 async function scrollLoading() {
     const opt = {
-        threshold:[1]
+        threshold:[0.99]
     };
     let observer = new IntersectionObserver(callLoadingATT, opt);
 
@@ -373,6 +454,14 @@ async function scrollLoading() {
     if(footerTag){
         observer.observe(footerTag);
     }
+}
+
+// 點擊"台北一日遊"的文字，會返回主頁
+const homePage = document.querySelector(".Nav-title");
+if (homePage){
+    homePage.addEventListener("click", function() {
+        window.location.href = `/`;
+    });
 }
 
 // 清除儲存的資料
