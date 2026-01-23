@@ -34,13 +34,21 @@ html {
 }
 
 .Nav-title{
-    width: 15rem;
+    width: 15.3rem;
     font-size: 3rem;
     font-weight: bold;
     color: #448899;
     margin-left: 0.7rem;
     display: flex;
     text-align: center;
+}
+
+.Nav-title:hover{
+    color: #316674;
+    transform: translateY(-3px);
+    transform: translateX(-3px);
+    box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 0.5rem;
 }
 
 .Nav-title-btn{
@@ -66,6 +74,12 @@ html {
     cursor:pointer;
 }
 
+.btn-appearance:hover{
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #3d3c3c;
+}
+
 .btn-sign{
     width: 50%;
     height: 3.2rem;
@@ -75,6 +89,12 @@ html {
     font-size: 1.6rem;
     font-weight: 500;
     cursor: pointer;
+}
+
+.btn-sign:hover{
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #3d3c3c;
 }
 
 footer{

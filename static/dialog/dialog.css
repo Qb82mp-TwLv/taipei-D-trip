@@ -51,8 +51,12 @@
 }
 
 .sec_btn img{
-    padding-bottom: 0.5rem;
+    padding: 0.5rem;
     cursor: pointer;
+}
+
+.sec_btn img:hover{
+    background-color: #EEE;
 }
 
 .dialog_third{
@@ -89,6 +93,11 @@
     font-size: 1.9rem;
     font-weight: 300;
     cursor: pointer;
+}
+
+.third_operationPart button:hover{
+    font-weight: 600;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .dialog_error{
@@ -130,4 +139,10 @@
 .signin_loginBtn, .login_signinBtn{
     cursor:pointer;
 }
+
+.signin_loginBtn:hover, .login_signinBtn:hover{
+    font-weight: bold;
+    color: #3d3c3c;
+}
+
 
